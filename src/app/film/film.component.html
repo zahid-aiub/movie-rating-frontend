@@ -26,8 +26,8 @@
             <ng-template pTemplate="body" let-film>
                 <tr>
                     <td>{{film.id}}</td>
-                    <td><a style="cursor: pointer; color: #3763ea"
-                           (click)="filmDetailsById(film.id)">{{film.title}}</a></td>
+                    <td><span style="cursor: pointer; color: #3763ea"
+                           routerLink="films/{{ film.id }}/">{{film.title}}</span></td>
                     <td>{{film.description}}</td>
                     <td style="min-width: 130px">{{film.releaseDate}}</td>
                     <td>

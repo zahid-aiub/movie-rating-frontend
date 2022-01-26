@@ -1,0 +1,8 @@
+.cstm-hover {
+    cursor: pointer;
+    font-style: italic;
+}
+
+.cstm-hover:hover {
+    color: #2c59ee;
+}
