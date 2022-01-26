@@ -136,7 +136,7 @@ export class PersonComponent implements OnInit {
             message: "Are you sure that you want to delete?",
             icon: "pi pi-exclamation-triangle",
             accept: () => {
-                if (id > 1000000) {
+                if (id) {
                     this.httpClient.delete<any>(API_URL + 'persons/' + id).subscribe(data => {
                         this.getAllPersons();
                         this.messageService.add({

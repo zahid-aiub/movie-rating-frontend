@@ -30,6 +30,7 @@ export class FilmComponent implements OnInit {
     genres: any;
     selectedPersons: any;
     selectedGenres: any;
+    selectedFilm: any;
 
 
     constructor(
@@ -91,6 +92,7 @@ export class FilmComponent implements OnInit {
     }
 
     onSubmit() {
+        console.log(this.isSubFilm);
         if (this.form.valid) {
             const data: any = {};
             data.title = this.form.get('title').value;
@@ -98,11 +100,12 @@ export class FilmComponent implements OnInit {
             data.releaseDate = this.convertDate(this.form.get('releaseDate').value);
             data.personIdList = this.selectedPersons;
             data.genreIdList = this.selectedGenres;
-            data.isSubFilm = this.isSubFilm;
+            data.isSubFilm = this.isSubFilm ? 1 : 0;
             if (this.isSubFilm) {
-                data.parentFilmId = 1;
+                data.parentFilmId = this.selectedFilm.id;
             }
 
+            console.log(data.isSubFilm);
             this.httpClient.post<any>(API_URL + 'films', data).subscribe(data => {
                 this.getAllFilms();
                 this.closeModal();
@@ -130,7 +133,7 @@ export class FilmComponent implements OnInit {
             message: "Are you sure that you want to delete?",
             icon: "pi pi-exclamation-triangle",
             accept: () => {
-                if (id > 1000000) {
+                if (id) {
                     this.httpClient.delete<any>(API_URL + 'films/' + id).subscribe(data => {
                         this.getAllFilms();
                         this.messageService.add({

@@ -31,7 +31,17 @@ export class FilmDetailsComponent implements OnInit {
 
     };
 
-    subFilm: any = [
+    subFilm: any = {
+        title: 'Spider-Man: No Way Home',
+        description: 'The moving images of a film are created by photographing actual scenes with a motion-picture camera, ' +
+            'by photographing drawings or miniature models using traditional animation techniques,' +
+            ' by means of CGI and computer animation, or by a combination of some or all of these techniques, and other visual effects.',
+        releaseDate: '12-02-1972',
+        rating: '4.8'
+
+    };
+
+    /*subFilms: any = [
         {
             id: 1,
             title: 'Spider-Man: No Way Home - 01',
@@ -74,11 +84,18 @@ export class FilmDetailsComponent implements OnInit {
             releaseDate: '15-03-1986',
 
         }
-    ];
+    ];*/
 
-    filmPerson: any = [{title: 'Steven Spielberg'}, {title: 'Martin Scorsese'}, {title: 'Quentin Tarantino'}];
+    subFilms: any;
 
-    filmGenre: any = [{title: 'Action'}, {title: 'Thriller'}, {title: 'Comedy'}];
+    filmPersons: any;
+
+    filmGenres: any;
+
+    isSubFilm: boolean = false;
+
+    subFilmPersons: any;
+    subFilmGenres: any;
 
     constructor(
         private router: Router,
@@ -100,17 +117,38 @@ export class FilmDetailsComponent implements OnInit {
     ngOnInit(): void {
         this.primengConfig.ripple = true;
         this.filmId = this.activatedRoute.snapshot.params['id'];
-        console.log(this.filmId);
         this.populateData(this.filmId);
     }
 
     private populateData(filmId: any) {
+        this.filmService.getFilmsDetails(filmId).subscribe((data) => {
+            this.film = data;
+        });
 
+        this.filmService.getAllSubFilms(filmId).subscribe((data) => {
+            console.log(data);
+            this.subFilms = data.data;
+        });
+
+        this.filmService.getFilmRating(filmId, this.isSubFilm).subscribe((data) => {
+            console.log(data);
+            this.film['rating'] = data;
+        });
+
+        this.filmService.getFilmPersonList(filmId, this.isSubFilm).subscribe((data) => {
+            console.log(data);
+            this.filmPersons = data;
+        });
+
+        this.filmService.getFilmGenreList(filmId, this.isSubFilm).subscribe((data) => {
+            console.log(data);
+            this.filmGenres = data;
+        });
 
     }
 
     openModal(id: any) {
-        console.log(id);
+        this.populateSubFilmData(id);
         this.modalRef = this.modalService.open(this.myModal, {
             size: "lg",
             modalClass: 'detailsModal',
@@ -126,5 +164,24 @@ export class FilmDetailsComponent implements OnInit {
 
     closeModal() {
         this.modalService.close(this.modalRef);
+    }
+
+    private populateSubFilmData(id: any) {
+        this.subFilm = this.subFilms.filter((data: any) => data.id == id)[0];
+        console.log(this.subFilm);
+
+        this.filmService.getFilmPersonList(this.subFilm.id, true).subscribe((data) => {
+            console.log(data);
+            this.subFilmPersons = data;
+        });
+
+        this.filmService.getFilmGenreList(this.subFilm.id, true).subscribe((data) => {
+            console.log(data);
+            this.subFilmGenres = data;
+        });
+
+        this.filmService.getFilmRating(this.subFilm.id, true).subscribe((data) => {
+            this.subFilm['rating'] = data;
+        });
     }
 }

@@ -38,7 +38,7 @@
             <td>
                 <div style="margin-left: 20px;">
                     <table class="table table-borderless">
-                        <tr *ngFor="let sub of subFilm">
+                        <tr *ngFor="let sub of subFilms">
                             <div><label class="cstm-hover" (click)="openModal(sub.id)">{{sub.title}}</label></div>
                             <hr>
                         </tr>
@@ -53,8 +53,8 @@
             <td>
                 <div style="margin-left: 20px;">
                     <table class="table table-borderless">
-                        <tr *ngFor="let person of filmPerson">
-                            <div><label>{{person.title}}</label></div>
+                        <tr *ngFor="let person of filmPersons">
+                            <div><label>{{person.name}}</label></div>
                             <hr>
                         </tr>
                     </table>
@@ -68,8 +68,8 @@
             <td>
                 <div style="margin-left: 20px;">
                     <table class="table table-borderless">
-                        <tr *ngFor="let genre of filmGenre">
-                            <div><label>{{genre.title}}</label></div>
+                        <tr *ngFor="let genre of filmGenres">
+                            <div><label>{{genre.name}}</label></div>
                             <hr>
                         </tr>
                     </table>
@@ -89,7 +89,7 @@
         <modal-content>
             <div class="container">
 
-                <h5 style="margin-top: 30px;">Details About - <span>{{film.title}}</span></h5>
+                <h5 style="margin-top: 30px;">Details About - <span>{{subFilm.title}}</span></h5>
                 <hr>
 
                 <table class="table table-borderless" style="margin-top: 30px;">
@@ -97,44 +97,30 @@
                         <td style="max-width: 200px"><label>Film Name </label></td>
                         <td>:</td>
                         <td>
-                            <div style="margin-left: 20px;">{{film.title}}</div>
+                            <div style="margin-left: 20px;">{{subFilm.title}}</div>
                         </td>
                     </tr>
                     <tr>
                         <td style="max-width: 200px"><label>Film Rating </label></td>
                         <td>:</td>
                         <td>
-                            <div style="margin-left: 20px;">{{film.rating}}</div>
+                            <div style="margin-left: 20px;">{{subFilm.rating}}</div>
                         </td>
                     </tr>
                     <tr>
                         <td style="max-width: 200px"><label>Description </label></td>
                         <td>:</td>
                         <td>
-                            <div style="margin-left: 20px;">{{film.description}}</div>
+                            <div style="margin-left: 20px;">{{subFilm.description}}</div>
                         </td>
                     </tr>
                     <tr>
                         <td style="max-width: 200px"><label>Release Date </label></td>
                         <td>:</td>
                         <td>
-                            <div style="margin-left: 20px;">{{film.releaseDate}}</div>
+                            <div style="margin-left: 20px;">{{subFilm.releaseDate}}</div>
                         </td>
                     </tr>
-                    <!--<tr>
-                        <td style="max-width: 200px"><label>Episodes </label></td>
-                        <td>:</td>
-                        <td>
-                            <div style="margin-left: 20px;">
-                                <table class="table table-borderless">
-                                    <tr *ngFor="let sub of subFilm">
-                                        <div><label class="cstm-hover">{{sub.title}}</label></div>
-                                        <hr>
-                                    </tr>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>-->
 
                     <tr>
                         <td style="max-width: 200px"><label>Film Persons </label></td>
@@ -142,8 +128,8 @@
                         <td>
                             <div style="margin-left: 20px;">
                                 <table class="table table-borderless">
-                                    <tr *ngFor="let person of filmPerson">
-                                        <div><label>{{person.title}}</label></div>
+                                    <tr *ngFor="let person of subFilmPersons">
+                                        <div><label>{{person.name}}</label></div>
                                         <hr>
                                     </tr>
                                 </table>
@@ -157,8 +143,8 @@
                         <td>
                             <div style="margin-left: 20px;">
                                 <table class="table table-borderless">
-                                    <tr *ngFor="let genre of filmGenre">
-                                        <div><label>{{genre.title}}</label></div>
+                                    <tr *ngFor="let genre of subFilmGenres">
+                                        <div><label>{{genre.name}}</label></div>
                                         <hr>
                                     </tr>
                                 </table>

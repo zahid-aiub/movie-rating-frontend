@@ -27,7 +27,7 @@
                 <tr>
                     <td>{{film.id}}</td>
                     <td><span style="cursor: pointer; color: #3763ea"
-                           routerLink="films/{{ film.id }}/">{{film.title}}</span></td>
+                              routerLink="films/{{ film.id }}/">{{film.title}}</span></td>
                     <td>{{film.description}}</td>
                     <td style="min-width: 130px">{{film.releaseDate}}</td>
                     <td>
@@ -56,13 +56,23 @@
                 <div *ngIf="isSubFilm" class="form-group" [ngClass]="displayFieldCss('filmList')">
                     <div class="col-sm-12">
                         <label for="filmList" class="control-label required">Film List</label>
-                        <p-multiSelect
+                        <!--<p-multiSelect
                                 id="filmList"
                                 class="form-control"
                                 formControlName="filmList"
                                 [options]="films"
                                 defaultLabel="Select a Film"
-                        ></p-multiSelect>
+                        ></p-multiSelect>-->
+                        <p-dropdown
+                                id="filmList"
+                                class="form-control"
+                                formControlName="filmList"
+                                [options]="films"
+                                [(ngModel)]="selectedFilm"
+                                placeholder="Select a Film"
+                                optionLabel="title"
+                                [showClear]="true">
+                        </p-dropdown>
                         <app-field-error-display [displayError]="isFieldValid('filmList')"
                                                  errorMsg="Film is required">
                         </app-field-error-display>
