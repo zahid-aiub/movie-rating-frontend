@@ -26,6 +26,7 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import {FilmComponent} from './film/film.component';
 import {GenreComponent} from './genre/genre.component';
 import {PersonComponent} from './person/person.component';
+import { FilmDetailsComponent } from './film-details/film-details.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import {PersonComponent} from './person/person.component';
         FieldErrorDisplayComponent,
         FilmComponent,
         GenreComponent,
-        PersonComponent
+        PersonComponent,
+        FilmDetailsComponent
 
     ],
     imports: [
