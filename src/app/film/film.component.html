@@ -1,0 +1,162 @@
+<div class="container">
+    <p-toast key="toast-key"
+             position="top-right"
+    ></p-toast>
+    <p-confirmPopup></p-confirmPopup>
+    <h2 style="margin-top: 5px;">Film List</h2>
+    <hr>
+    <br>
+    <button class="btn btn-outline-info"
+            (click)="openModal()"
+    >Add New
+    </button> &nbsp;&nbsp;
+    <br>
+    <br>
+    <div>
+        <p-table [value]="films">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Release Date</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-film>
+                <tr>
+                    <td>{{film.id}}</td>
+                    <td><a style="cursor: pointer; color: #3763ea"
+                           (click)="filmDetailsById(film.id)">{{film.title}}</a></td>
+                    <td>{{film.description}}</td>
+                    <td style="min-width: 130px">{{film.releaseDate}}</td>
+                    <td>
+                        <button class="btn btn-outline-danger" (click)="confirmDelete($event, film.id)">Delete</button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<div>
+    <modal #myModal>
+        <modal-header>
+            <h4>Add New Film</h4>
+        </modal-header>
+        <modal-content>
+
+            <form class="form-control" [formGroup]="form">
+
+                <p-checkbox formControlName="subFilm" [binary]="true" (onChange)="handleSubFilm($event)"></p-checkbox>
+                Is Sub Film
+                <br>
+                <br>
+
+                <div *ngIf="isSubFilm" class="form-group" [ngClass]="displayFieldCss('filmList')">
+                    <div class="col-sm-12">
+                        <label for="filmList" class="control-label required">Film List</label>
+                        <p-multiSelect
+                                id="filmList"
+                                class="form-control"
+                                formControlName="filmList"
+                                [options]="films"
+                                defaultLabel="Select a Film"
+                        ></p-multiSelect>
+                        <app-field-error-display [displayError]="isFieldValid('filmList')"
+                                                 errorMsg="Film is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+
+                <div class="form-group" [ngClass]="displayFieldCss('title')">
+                    <div class="col-sm-12">
+                        <label for="title" class="control-label required">Film/Sub Film Name</label>
+                        <input type="text" id="title" class="form-control"
+                               formControlName="title">
+                        <app-field-error-display [displayError]="isFieldValid('title')"
+                                                 errorMsg="Film Name is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="displayFieldCss('description')">
+                    <div class="col-sm-12">
+                        <label for="description" class="control-label required">Description</label>
+                        <input type="text" id="description" class="form-control"
+                               formControlName="description">
+                        <app-field-error-display [displayError]="isFieldValid('description')"
+                                                 errorMsg="Description is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+
+                <div class="form-group" [ngClass]="displayFieldCss('releaseDate')">
+                    <div class="col-sm-12">
+                        <label for="releaseDate" class="control-label required">Release Date </label>
+                        <p-calendar id="releaseDate"
+                                    class="form-control"
+                                    formControlName="releaseDate"
+                                    [(ngModel)]="selectedReleaseDate"
+                                    [readonlyInput]=true
+                                    [showIcon]=true
+                        ></p-calendar>
+                        <app-field-error-display [displayError]="isFieldValid('releaseDate')"
+                                                 errorMsg="Release Date is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+
+                <div class="form-group" [ngClass]="displayFieldCss('geners')">
+                    <div class="col-sm-12">
+                        <label for="geners" class="control-label required">Gener List</label>
+                        <p-multiSelect
+                                id="geners"
+                                class="form-control"
+                                formControlName="geners"
+                                [options]="genres"
+                                [(ngModel)]="selectedGenres"
+                                optionLabel="name"
+                                optionValue="id"
+                                defaultLabel="Select Geners"
+                        ></p-multiSelect>
+                        <app-field-error-display [displayError]="isFieldValid('geners')"
+                                                 errorMsg="Gener is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+
+                <div [ngClass]="displayFieldCss('filmPerson')">
+                    <div class="col-sm-12">
+                        <label for="filmPerson" class="control-label required">Film Person</label>
+                        <p-multiSelect
+                                id="filmPerson"
+                                class="form-control"
+                                formControlName="filmPerson"
+                                [options]="persons"
+                                [(ngModel)]="selectedPersons"
+                                optionLabel="name"
+                                optionValue="id"
+                                defaultLabel="Select a Film Person"
+                        ></p-multiSelect>
+                        <app-field-error-display [displayError]="isFieldValid('filmPerson')"
+                                                 errorMsg="Film Person is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+
+            </form>
+
+
+        </modal-content>
+        <modal-footer>
+            <button class="btn btn-outline-danger" (click)="closeModal()">Close</button> &nbsp;
+            <button class="btn btn-outline-success" (click)="onSubmit()">Create Film</button>
+        </modal-footer>
+    </modal>
+</div>

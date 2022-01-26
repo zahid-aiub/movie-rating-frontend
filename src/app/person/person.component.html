@@ -1,0 +1,128 @@
+<div class="container">
+    <p-toast key="toast-key"
+             position="top-right"
+    ></p-toast>
+    <p-confirmPopup></p-confirmPopup>
+    <h2 style="margin-top: 5px;">Film Person List</h2>
+    <hr>
+    <br>
+    <button class="btn btn-outline-info"
+            (click)="openModal()"
+    >Add Person
+    </button> &nbsp;&nbsp;
+    <br>
+    <br>
+    <div>
+        <p-table [value]="persons">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Sex</th>
+                    <th>Date Of Birth</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-person>
+                <tr>
+                    <td>{{person.id}}</td>
+                    <td><a style="cursor: pointer; color: #3763ea"
+                           (click)="personDetailsById(person.id)">{{person.name}}</a></td>
+                    <td>{{person.sex}}</td>
+                    <td>{{person.dob}}</td>
+                    <td>{{person.type.toUpperCase()}}</td>
+                    <td><button class="btn btn-outline-danger"(click)="confirmDelete($event, person.id)">Delete</button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<div>
+    <modal #personModal>
+        <modal-header>
+            <h4>Add New Person</h4>
+        </modal-header>
+        <modal-content>
+
+            <form class="form-control" [formGroup]="form">
+
+                <div class="form-group" [ngClass]="displayFieldCss('name')">
+                    <div class="col-sm-12">
+                        <label for="name" class="control-label required">Name</label>
+                        <input type="text" id="name" class="form-control"
+                               formControlName="name">
+                        <app-field-error-display [displayError]="isFieldValid('name')"
+                                                 errorMsg="Name is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group" [ngClass]="displayFieldCss('dob')">
+                    <div class="col-sm-12">
+                        <label for="dob" class="control-label required">Date Of Birth </label>
+                        <p-calendar id="dob"
+                                    class="form-control"
+                                    formControlName="dob"
+                                    [(ngModel)]="selectedDOB"
+                                    [readonlyInput]=true
+                                    [showIcon]=true
+                        ></p-calendar>
+                        <app-field-error-display [displayError]="isFieldValid('dob')"
+                                                 errorMsg="Date Of Birth is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group" [ngClass]="displayFieldCss('sex')">
+                    <div class="col-sm-12">
+                        <label for="sex" class="control-label required">Sex</label>
+                        <div *ngFor="let sex of genders" class="p-field-checkbox">
+                            <p-radioButton
+                                    id="sex"
+                                    formControlName="sex"
+                                    [inputId]="sex.key"
+                                    name="sex"
+                                    [value]="sex"
+                                    [(ngModel)]="selectedSex"
+                            ></p-radioButton>
+                            <label style="margin-left: 10px;" [for]="sex.key">{{sex.name}}</label>
+                        </div>
+                        <app-field-error-display [displayError]="isFieldValid('sex')"
+                                                 errorMsg="Date Of Birth is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group" [ngClass]="displayFieldCss('type')">
+                    <div class="col-sm-12">
+                        <label for="type" class="control-label required">Person Type</label>
+                        <div *ngFor="let person of personTypes" class="p-field-checkbox">
+                            <p-radioButton
+                                    id="type"
+                                    formControlName="type"
+                                    [inputId]="person.key"
+                                    name="type"
+                                    [value]="person"
+                                    [(ngModel)]="selectedPersonType"
+                            ></p-radioButton>
+                            <label style="margin-left: 10px;" [for]="person.key">{{person.name}}</label>
+                        </div>
+                        <app-field-error-display [displayError]="isFieldValid('type')"
+                                                 errorMsg="Person type is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+
+            </form>
+
+
+        </modal-content>
+        <modal-footer>
+            <button class="btn btn-outline-danger" (click)="closeModal()">Close</button>  &nbsp;
+            <button class="btn btn-outline-success" (click)="onSubmit()">Create Person</button>
+        </modal-footer>
+    </modal>
+</div>

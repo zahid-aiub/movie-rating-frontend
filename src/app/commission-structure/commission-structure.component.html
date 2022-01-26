@@ -1,0 +1,178 @@
+<div [formGroup]="commissionStructure" class="commission-structure-wrapper card cstm-margin">
+    <div style="margin-left: 20px;">
+        <h5 class="cstm-h5">{{commissionStructureName}}</h5>
+        <p-checkbox (onChange)="handleSameForAll($event)"
+                    [binary]="true"></p-checkbox>
+        Same for all
+    </div>
+
+    <p-tabView>
+        <p-tabPanel *ngFor="let operator of operators;" header="{{operator}}" [disabled]="isSameForAll">
+            <p>
+                <button class="btn btn-success" type="button" (click)="addSlab(operator)">Add</button>
+            </p>
+            <div class="div-table" formArrayName="{{operator}}"
+                 *ngIf="isRetailerCategorySelected == false && isPeakHourDefinitionSelected == false">
+                <div class="div-table-row">
+                    <div class="commission-table-cell div-table-cell">Slab</div>
+                    <div class="commission-table-cell div-table-cell">From</div>
+                    <div class="commission-table-cell div-table-cell">To</div>
+                    <div class="commission-table-cell div-table-cell">Amount</div>
+                    <div class="commission-table-cell div-table-cell div-table-cell-last">Action</div>
+                </div>
+
+                <div class="div-table-row"
+                     *ngFor="let commission of getRegular(operator).controls; let i=index" [formGroupName]="i">
+                    <div class="commission-table-cell div-table-cell"><input type="text" class="commission-input"
+                                                                             formControlName="slab"></div>
+                    <div class="commission-table-cell div-table-cell"><input type="number" class="commission-input"
+                                                                             formControlName="from"></div>
+                    <div class="commission-table-cell div-table-cell"><input type="number" class="commission-input"
+                                                                             formControlName="to"></div>
+                    <div class="commission-table-cell div-table-cell"><div formGroupName="commission"><input type="number" class="commission-input"
+                                                                             formControlName="amount"></div></div>
+                    <div class="commission-table-cell div-table-cell div-table-cell-last">
+                        <button (click)="removeSlab(i, operator)">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="div-table" formArrayName="{{operator}}"
+                 *ngIf="isRetailerCategorySelected == true && isPeakHourDefinitionSelected == false">
+                <div class="div-table-row">
+                    <div class="commission-table-cell div-table-cell">Slab</div>
+                    <div class="commission-table-cell div-table-cell">From</div>
+                    <div class="commission-table-cell div-table-cell">To</div>
+                    <div class="div-table-col-parent">
+                        <div class="commission-table-cell div-table-cell"
+                             *ngFor="let category of retailerCategory; let i=index">{{category}}</div>
+                    </div>
+                    <div class="commission-table-cell div-table-cell div-table-cell-last">Action</div>
+                </div>
+
+                <div class="div-table-row"
+                     *ngFor="let commission of getRegular(operator).controls; let i=index" [formGroupName]="i">
+                    <div class="commission-table-cell div-table-cell"><input type="text" class="commission-input"
+                                                                             formControlName="slab"></div>
+                    <div class="commission-table-cell div-table-cell"><input type="number" class="commission-input"
+                                                                             formControlName="from"></div>
+                    <div class="commission-table-cell div-table-cell"><input type="number" class="commission-input"
+                                                                             formControlName="to"></div>
+                    <div class="div-table-col-parent" formGroupName="commission">
+                        <div class="div-table-col-parent" formGroupName="retailerCategory">
+                            <div class="commission-table-cell div-table-cell"
+                                 *ngFor="let category of retailerCategory; let j=index">
+                                <input type="number" class="commission-input" formControlName="{{category}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="commission-table-cell div-table-cell div-table-cell-last">
+                        <button (click)="removeSlab(i, operator)">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="div-table" formArrayName="{{operator}}"
+                 *ngIf="isRetailerCategorySelected == false && isPeakHourDefinitionSelected == true">
+                <div class="div-table-row">
+                    <div class="commission-table-cell div-table-cell"></div>
+                    <div class="commission-table-cell div-table-cell"></div>
+                    <div class="commission-table-cell div-table-cell"></div>
+                    <div class="commission-table-cell div-table-cell">Peak Hour</div>
+                    <div class="commission-table-cell div-table-cell">Off Peak Hour</div>
+                    <div class="commission-table-cell div-table-cell div-table-cell-last"></div>
+                </div>
+
+                <div class="div-table-row">
+                    <div class="commission-table-cell div-table-cell">Slab</div>
+                    <div class="commission-table-cell div-table-cell">From</div>
+                    <div class="commission-table-cell div-table-cell">To</div>
+                    <div class="commission-table-cell div-table-cell">Amount</div>
+                    <div class="commission-table-cell div-table-cell">Amount</div>
+                    <div class="commission-table-cell div-table-cell div-table-cell-last"></div>
+                </div>
+
+                <div class="div-table-row"
+                     *ngFor="let commission of getRegular(operator).controls; let i=index" [formGroupName]="i">
+                    <div class="commission-table-cell div-table-cell"><input type="text" class="commission-input"
+                                                                             formControlName="slab"></div>
+                    <div class="commission-table-cell div-table-cell"><input type="number" class="commission-input"
+                                                                             formControlName="from"></div>
+                    <div class="commission-table-cell div-table-cell"><input type="number" class="commission-input"
+                                                                             formControlName="to"></div>
+                    <div class="div-table-col-parent" formGroupName="commission">
+                        <div class="div-table-col-parent" formGroupName="peakHourAmount">
+                            <div class="commission-table-cell div-table-cell"><input type="number"
+                                                                                     class="commission-input"
+                                                                                     formControlName="peak"></div>
+                            <div class="commission-table-cell div-table-cell"><input type="number"
+                                                                                     class="commission-input"
+                                                                                     formControlName="offPeak"></div>
+                        </div>
+                    </div>
+                    <div class="commission-table-cell div-table-cell div-table-cell-last">
+                        <button (click)="removeSlab(i, operator)">Remove</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="div-table" formArrayName="{{operator}}"
+                 *ngIf="isRetailerCategorySelected == true && isPeakHourDefinitionSelected == true">
+                <div class="div-table-row">
+                    <div class="commission-table-cell div-table-cell"></div>
+                    <div class="commission-table-cell div-table-cell"></div>
+                    <div class="commission-table-cell div-table-cell"></div>
+                    <div class="commission-table-cell div-table-cell" style="{{peakHourStyle}}">Peak Hour</div>
+                    <div class="commission-table-cell div-table-cell" style="{{peakHourStyle}}">Off Peak Hour</div>
+                    <div class="commission-table-cell div-table-cell div-table-cell-last"></div>
+                </div>
+
+                <div class="div-table-row">
+                    <div class="commission-table-cell div-table-cell">Slab</div>
+                    <div class="commission-table-cell div-table-cell">From</div>
+                    <div class="commission-table-cell div-table-cell">To</div>
+                    <div class="div-table-col-parent">
+                        <div class="commission-table-cell div-table-cell"
+                             *ngFor="let category of retailerCategory; let i=index">{{category}}</div>
+                    </div>
+                    <div class="div-table-col-parent">
+                        <div class="commission-table-cell div-table-cell"
+                             *ngFor="let category of retailerCategory; let i=index">{{category}}</div>
+                    </div>
+                    <div class="commission-table-cell div-table-cell div-table-cell-last"></div>
+                </div>
+
+                <div class="div-table-row"
+                     *ngFor="let commission of getRegular(operator).controls; let i=index" [formGroupName]="i">
+                    <div class="commission-table-cell div-table-cell"><input type="text" class="commission-input"
+                                                                             formControlName="slab"></div>
+                    <div class="commission-table-cell div-table-cell"><input type="number" class="commission-input"
+                                                                             formControlName="from"></div>
+                    <div class="commission-table-cell div-table-cell"><input type="number" class="commission-input"
+                                                                             formControlName="to"></div>
+                    <div class="div-table-col-parent" formGroupName="commission">
+                        <div class="div-table-col-parent" formGroupName="peakHourRetailerCategory">
+                            <div class="div-table-col-parent" formGroupName="peak">
+                                <div class="commission-table-cell div-table-cell"
+                                     *ngFor="let category of retailerCategory; let j=index">
+                                    <input type="number" class="commission-input"
+                                           formControlName="{{category}}">
+                                </div>
+                            </div>
+                            <div class="div-table-col-parent" formGroupName="offPeak">
+                                <div class="commission-table-cell div-table-cell"
+                                     *ngFor="let category of retailerCategory; let j=index">
+                                    <input type="number" class="commission-input"
+                                           formControlName="{{category}}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="commission-table-cell div-table-cell div-table-cell-last">
+                        <button (click)="removeSlab(i, operator)">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+</div>

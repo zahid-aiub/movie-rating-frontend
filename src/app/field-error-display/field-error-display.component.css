@@ -1,0 +1,10 @@
+.error-msg {
+  color: #a94442;
+}
+.fix-error-icon {
+  top: 27px;
+}
+
+.sr-only {
+  padding-top: 20px;
+}

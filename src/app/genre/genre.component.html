@@ -1,0 +1,69 @@
+<div class="container">
+    <p-toast key="toast-key"
+             position="top-right"
+    ></p-toast>
+
+    <h2 style="margin-top: 5px;">Film Genre List</h2>
+    <hr>
+    <br>
+    <button class="btn btn-outline-info"
+            (click)="openModal()"
+    >Add Genre
+    </button> &nbsp;&nbsp;
+    <br>
+    <br>
+    <div>
+        <p-table [value]="genres">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-genre>
+                <tr>
+                    <td>{{genre.id}}</td>
+                    <td><a style="cursor: pointer; color: #3763ea"
+                           (click)="genreDetailsById(genre.id)">{{genre.name}}</a></td>
+                    <td>{{genre.createdAt}}</td>
+                    <td><button class="btn btn-outline-danger"(click)="delete(genre.id)">Delete</button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<div>
+    <modal #genreModal>
+        <modal-header>
+            <h4>Add New Genre</h4>
+        </modal-header>
+        <modal-content>
+
+            <form class="form-control" [formGroup]="form">
+
+                <div class="form-group" [ngClass]="displayFieldCss('name')">
+                    <div class="col-sm-12">
+                        <label for="name" class="control-label required">Genre Name</label>
+                        <input type="text" id="name" class="form-control"
+                               formControlName="name">
+                        <app-field-error-display [displayError]="isFieldValid('name')"
+                                                 errorMsg="Name is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+
+
+            </form>
+
+
+        </modal-content>
+        <modal-footer>
+            <button class="btn btn-outline-danger" (click)="closeModal()">Close</button>  &nbsp;
+            <button class="btn btn-outline-success" (click)="onSubmit()">Create Genre</button>
+        </modal-footer>
+    </modal>
+</div>

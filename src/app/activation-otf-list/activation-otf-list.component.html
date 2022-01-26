@@ -1,0 +1,74 @@
+<div class="container">
+    <p-toast></p-toast>
+
+    <p-confirmPopup></p-confirmPopup>
+    <br>
+    <h2>Activation OTF List</h2>
+    <hr>
+    <br>
+    <div>
+        <button class="btn btn-outline-info"
+                (click)="addNewOtf()"
+        >Add New
+        </button> &nbsp;&nbsp;
+        <button *ngIf="selectedOtfId" class="btn btn-outline-info"
+                (click)="copyOtf()"
+        >Copy
+        </button>&nbsp;&nbsp;
+        <button *ngIf="selectedOtfId" class="btn btn-outline-info"
+                (click)="otfDetails()"
+        >Details
+        </button>&nbsp;&nbsp;
+        <button *ngIf="selectedOtfId" class="btn btn-outline-danger"
+                (click)="confirmDelete($event)"
+        >Delete
+        </button>&nbsp;&nbsp;
+
+        <button *ngIf="selectedOtfId" class="btn btn-outline-success"
+                (click)="confirmApprove($event)"
+        >Approve
+        </button>&nbsp;&nbsp;
+        <button *ngIf="selectedOtfId" class="btn btn-outline-warning"
+                (click)="confirmReject($event)"
+        >Reject
+        </button>
+    </div>
+    <br>
+                <div>
+                    <p-table [value]="activationOTFS">
+                        <ng-template pTemplate="header">
+                            <tr>
+                    <th></th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Activation Start Date</th>
+                    <th>Activation End Date</th>
+                    <th>Status</th>
+                    <th>Brand</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-otf>
+                <tr>
+                    <td><input class="form-check-input" (change)="selectedOtf($event, otf.id)" type="radio" name="otf-record" value=""></td>
+                    <td>{{otf.id}}</td>
+                    <td><a style="cursor: pointer; color: #3763ea" (click)="otfDetailsFromName(otf.id)">{{otf.description}}</a></td>
+                    <td>{{otf.activationStartDate}}</td>
+                    <td>{{otf.activationEndDate}}</td>
+                    <td>{{otf.status}}</td>
+                    <td>{{otf.brand}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <div>
+        <br>
+        <p-paginator [rows]="pageSize"
+                     [pageLinkSize]="pageSize"
+                     [totalRecords]="totalRecords"
+                     [rowsPerPageOptions]="[10,20,30]"
+                     (onPageChange)="paginate($event)"
+
+        ></p-paginator>
+    </div>
+</div>

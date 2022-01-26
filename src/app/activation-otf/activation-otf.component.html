@@ -1,0 +1,478 @@
+<div class="container">
+
+    <p-toast key="toast-key"
+             position="top-right"
+    ></p-toast>
+    <form class="form-control" [formGroup]="form">
+        <br>
+        <!--<i class="bi bi-arrow-left-square-fill">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
+            </svg>
+        </i>-->
+        <h2>Activation OTF Form</h2>
+        <hr>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('description')">
+            <div class="col-sm-12">
+                <label for="description" class="control-label required">Description</label>
+                <input type="text" id="description" class="form-control"
+                       formControlName="description">
+                <app-field-error-display [displayError]="isFieldValid('description')"
+                                         errorMsg="Description is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('region')">
+            <div class="col-sm-12">
+                <label for="region" class="control-label required">Region</label>
+                <p-multiSelect
+                        id="region"
+                        class="form-control"
+                        formControlName="region"
+                        [options]="regions"
+                        optionLabel="name"
+                        optionValue="code"
+                        defaultLabel="Select a Region"
+                        (onChange)="handleRegion($event.value)"
+                ></p-multiSelect>
+                <app-field-error-display [displayError]="isFieldValid('region')"
+                                         errorMsg="Region is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('area')">
+            <div class="col-sm-12">
+                <label for="area" class="control-label required">Area</label>
+                <p-multiSelect
+                        id="area"
+                        class="form-control"
+                        formControlName="area"
+                        [options]="areas"
+                        optionLabel="name"
+                        optionValue="code"
+                        defaultLabel="Select a Area"
+                        (onChange)="handleArea($event.value)"
+                ></p-multiSelect>
+                <app-field-error-display [displayError]="isFieldValid('area')"
+                                         errorMsg="Area is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('distributor')">
+            <div class="col-sm-12">
+                <label for="distributor" class="control-label required">Distributor</label>
+                <p-multiSelect
+                        id="distributor"
+                        class="form-control"
+                        formControlName="distributor"
+                        [options]="distributors"
+                        optionLabel="name"
+                        [(ngModel)]="selectedDistributor"
+                        optionValue="code"
+                        defaultLabel="Select a distributor"
+                ></p-multiSelect>
+                <app-field-error-display [displayError]="isFieldValid('distributor')"
+                                         errorMsg="Distributor is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div>
+            Material Code: <button class="btn btn-outline-warning" (click)="openModal()">Pick Material Code</button>
+            <br>
+            <br>
+        </div>
+
+        <div class="form-group" [ngClass]="displayFieldCss('activationStartDate')">
+            <div class="col-sm-12">
+                <label for="activationStartDate" class="control-label required">Activation Start Date: </label>
+                <p-calendar id="activationStartDate"
+                            class="form-control"
+                            formControlName="activationStartDate"
+                            [(ngModel)]="activationStartDate"
+                            [readonlyInput]=true
+                            [showIcon]=true
+                ></p-calendar>
+                <app-field-error-display
+                        *ngIf="this.form.get('activationStartDate').errors && this.form.get('activationStartDate').errors['dateBeforeToday']"
+                        [displayError]="isFieldValid('activationStartDate')"
+                        errorMsg="Activation Start Date can not be set before today">
+                </app-field-error-display>
+                <app-field-error-display
+                        *ngIf="this.form.get('activationStartDate').errors && this.form.get('activationStartDate').errors['required']"
+                        [displayError]="isFieldValid('activationStartDate')"
+                        errorMsg="ActivationStartDate is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('activationEndDate')">
+            <div class="col-sm-12">
+                <label for="activationEndDate" class="control-label required">Activation End Date:</label>
+                <p-calendar id="activationEndDate"
+                            class="form-control"
+                            formControlName="activationEndDate"
+                            [(ngModel)]="activationEndDate"
+                            [readonlyInput]="true"
+                            [showIcon]=true
+                ></p-calendar>
+                <app-field-error-display
+                        *ngIf="this.form.get('activationEndDate').errors && this.form.get('activationEndDate').errors['dateBeforeActivationStartDate']"
+                        [displayError]="isFieldValid('activationEndDate')"
+                        errorMsg="Activation End Date can not be set before Activation Start Date">
+                </app-field-error-display>
+                <app-field-error-display
+                        *ngIf="this.form.get('activationEndDate').errors && this.form.get('activationEndDate').errors['required']"
+                        [displayError]="isFieldValid('activationEndDate')"
+                                         errorMsg="ActivationEndDate is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('simCommissionType')">
+            <div class="col-sm-12">
+                <label for="simCommissionType" class="control-label required cstm-level">Sim Commission Type</label>
+                <p-dropdown
+                            id="simCommissionType"
+                            class="form-control"
+                            formControlName="simCommissionType"
+                            [options]="simCommissionTypes"
+                            [(ngModel)]="selectedSimCommissionType"
+                            placeholder="Select one"
+                            optionLabel="name"
+                            [showClear]=true
+                            (onChange)="handleDropdownChange($event, 'simCommissionType')"
+                ></p-dropdown>
+                <app-field-error-display [displayError]="isFieldValid('simCommissionType')"
+                                         errorMsg="SimCommissionType is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('liftingFrom')">
+            <div class="col-sm-12">
+                <label for="liftingFrom" class="control-label required">Lifting From</label>
+                <p-calendar id="liftingFrom"
+                            class="form-control"
+                            formControlName="liftingFrom"
+                            [(ngModel)]="liftingFrom"
+                            [readonlyInput]=true
+                            [showIcon]=true
+                ></p-calendar>
+                <app-field-error-display
+                        *ngIf="this.form.get('liftingFrom').errors && this.form.get('liftingFrom').errors['dateAfterActivationStartDate']"
+                        [displayError]="isFieldValid('liftingFrom')"
+                        errorMsg="Date must be before activation start date">
+                </app-field-error-display>
+                <app-field-error-display [displayError]="isFieldValid('liftingFrom')"
+                                         errorMsg="LiftingFrom is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('liftingTo')">
+            <div class="col-sm-12">
+                <label for="liftingTo" class="control-label required">Lifting To</label>
+
+                <p-calendar id="liftingTo"
+                            class="form-control"
+                            formControlName="liftingTo"
+                            [(ngModel)]="liftingTo"
+                            [readonlyInput]=true
+                            [showIcon]=true
+                ></p-calendar>
+                <app-field-error-display [displayError]="isFieldValid('liftingTo')" errorMsg="LiftingTo is required">
+                </app-field-error-display>
+            </div>
+            <br>
+        </div>
+
+        <div class="form-group" [ngClass]="displayFieldCss('liftingPoint')">
+            <div class="col-sm-12">
+                <label for="liftingPoint" class="control-label required cstm-level">Lifting Point</label>
+                <p-dropdown [options]="liftingPoints"
+                            id="liftingPoint"
+                            formControlName="liftingPoint"
+                            [(ngModel)]="selectedLiftingPoint"
+                            optionLabel="name"
+                            placeholder="Select one"
+                            (onChange)="handleDropdownChange($event, 'liftingPoint')"
+                ></p-dropdown>
+                <app-field-error-display [displayError]="isFieldValid('liftingPoint')"
+                                         errorMsg="LiftingPoint is required">
+                </app-field-error-display>
+            </div>
+            <br>
+        </div>
+
+        <div class="form-group" [ngClass]="displayFieldCss('robiMasterEl')">
+            <div class="col-sm-12">
+                <label for="robiMasterEl" class="control-label required">Robi Master El</label>
+                <input type="number" id="robiMasterEl" class="form-control" formControlName="robiMasterEl">
+                <app-field-error-display [displayError]="isFieldValid('robiMasterEl')"
+                                         errorMsg="RobiMasterEl is required">
+                </app-field-error-display>
+            </div>
+        </div>
+
+        <div class="form-group" [ngClass]="displayFieldCss('robiMasterElPin')">
+            <div class="col-sm-12">
+                <label for="robiMasterElPin" class="control-label required">Robi Master El Pin</label>
+                <input type="password" id="robiMasterElPin" class="form-control" formControlName="robiMasterElPin">
+                <app-field-error-display [displayError]="isFieldValid('robiMasterElPin')"
+                                         errorMsg="RobiMasterElPin is required">
+                </app-field-error-display>
+            </div>
+        </div>
+
+        <div class="form-group" [ngClass]="displayFieldCss('airtelMasterEl')">
+            <div class="col-sm-12">
+                <label for="airtelMasterEl" class="control-label required">Airtel Master El</label>
+                <input type="number" id="airtelMasterEl" class="form-control" formControlName="airtelMasterEl">
+                <app-field-error-display [displayError]="isFieldValid('airtelMasterEl')"
+                                         errorMsg="AirtelMasterEl is required">
+                </app-field-error-display>
+            </div>
+        </div>
+
+        <div class="form-group" [ngClass]="displayFieldCss('airtelMasterElPin')">
+            <div class="col-sm-12">
+                <label for="airtelMasterElPin" class="control-label required">Airtel Master El Pin</label>
+                <input type="password" id="airtelMasterElPin" class="form-control" formControlName="airtelMasterElPin">
+                <app-field-error-display [displayError]="isFieldValid('airtelMasterElPin')"
+                                         errorMsg="AirtelMasterElPin is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('paymentType')">
+            <div class="col-sm-12">
+                <label for="paymentType" class="control-label required cstm-level">Payment Type</label>
+                <p-dropdown [options]="paymentTypes"
+                            id="paymentType"
+                            formControlName="paymentType"
+                            [(ngModel)]="selectedPaymentType"
+                            optionLabel="name"
+                            placeholder="Select one"
+                            (onChange)="handleDropdownChange($event, 'paymentType')"
+                ></p-dropdown>
+                <app-field-error-display [displayError]="isFieldValid('paymentType')"
+                                         errorMsg="PaymentType is required">
+                </app-field-error-display>
+            </div>
+            <br>
+        </div>
+
+        <div class="form-group" [ngClass]="displayFieldCss('channel')">
+            <div class="col-sm-12">
+                <label for="channel" class="control-label required">Channel</label>
+                <p-multiSelect
+                        id="channel"
+                        class="form-control"
+                        formControlName="channel"
+                        [options]="channels"
+                        defaultLabel="Select a Channel"
+                ></p-multiSelect>
+                <app-field-error-display [displayError]="isFieldValid('channel')"
+                                         errorMsg="Channel is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('channelPartner')">
+            <div class="col-sm-12">
+                <label for="channelPartner" class="control-label required">Channel Partner</label>
+                <p-dropdown
+                        id="channelPartner"
+                        formControlName="channelPartner"
+                        [options]="chanelPartners"
+                        [(ngModel)]="selectedChanelPartner"
+                        optionLabel="name"
+                        placeholder="Select one"
+                        (onChange)="handleDropdownChange($event, 'channelPartner')"
+                ></p-dropdown>
+                <app-field-error-display [displayError]="isFieldValid('channelPartner')"
+                                         errorMsg="ChannelPartner is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('maxOtf')">
+            <div class="col-sm-12">
+                <label for="maxOtf" class="control-label required">Max Otf</label>
+                <input type="number" id="maxOtf" class="form-control" formControlName="maxOtf">
+                <app-field-error-display [displayError]="isFieldValid('maxOtf')" errorMsg="MaxOtf is required">
+                </app-field-error-display>
+            </div>
+        </div>
+
+        <div class="form-group" [ngClass]="displayFieldCss('maxNid')">
+            <div class="col-sm-12">
+                <label for="maxNid" class="control-label required">Max Nid</label>
+                <input type="number" id="maxNid" class="form-control" formControlName="maxNid">
+                <app-field-error-display [displayError]="isFieldValid('maxNid')" errorMsg="MaxNid is required">
+                </app-field-error-display>
+            </div>
+        </div>
+
+        <div class="form-group" [ngClass]="displayFieldCss('nidWithinDays')">
+            <div class="col-sm-12">
+                <label for="nidWithinDays" class="control-label required">Nid Within Days</label>
+                <input type="number" id="nidWithinDays" class="form-control" formControlName="nidWithinDays">
+                <app-field-error-display [displayError]="isFieldValid('nidWithinDays')"
+                                         errorMsg="NidWithinDays is required">
+                </app-field-error-display>
+            </div>
+            <br>
+        </div>
+
+        <input type="checkbox" formControlName="retailerCategory" (change)="handleRetailerCategory()"/>
+        Retailer Category
+        <input type="checkbox" formControlName="peakHour" (change)="handlePeakHourDefinition()"/>
+        Peak Hour Definition
+        <br>
+        <br>
+
+        <div class="form-group" [ngClass]="displayFieldCss('peakHourStart')">
+            <div class="col-sm-12">
+                <label for="peakHourStart" class="control-label required">Peak Hour Start</label>
+                <input [readonly]="!isPeakHourDefinitionSelected" type="text" id="peakHourStart" class="form-control" formControlName="peakHourStart">
+                <app-field-error-display [displayError]="isFieldValid('peakHourStart')"
+                                         errorMsg="Peak Hour Start time is required">
+                </app-field-error-display>
+            </div>
+        </div>
+
+        <div class="form-group" [ngClass]="displayFieldCss('peakHourEnd')">
+            <div class="col-sm-12">
+                <label for="peakHourEnd" class="control-label required">Peak Hour End</label>
+                <input [readonly]="!isPeakHourDefinitionSelected" type="text" id="peakHourEnd" class="form-control" formControlName="peakHourEnd">
+                <app-field-error-display [displayError]="isFieldValid('peakHourEnd')"
+                                         errorMsg="Peak Hour End time is required">
+                </app-field-error-display>
+            </div>
+        </div>
+        <br>
+
+        <app-commission-structure [commissionStructure]="getCommissionStructure('regularCommissionStructure')"
+                                  [commissionStructureType]="commissionStructureTypes.regularCommissionStructure"
+                                  [commissionStructureName]="commissionStructureNames.regularCommissionStructure"
+                                  [peakHourStyle]="peakHourStyle"
+                                  [operators]="operators"
+                                  [isRetailerCategorySelected]="isRetailerCategorySelected"
+                                  [isPeakHourDefinitionSelected]="isPeakHourDefinitionSelected"
+                                  [isSameForAll]="isSameForAllRegularCommission"
+                                  [retailerCategory]="retailerCategories"
+                                  (invokeHandleSameForAll)="handleSameForAll($event)"
+                                  (invokeAddSlab)="addSlab($event)"
+                                  (invokeRemoveSlab)="removeSlab($event)"></app-commission-structure>
+
+        <app-commission-structure [commissionStructure]="getCommissionStructure('sameNIDCommissionStructure')"
+                                  [commissionStructureType]="commissionStructureTypes.sameNIDCommissionStructure"
+                                  [commissionStructureName]="commissionStructureNames.sameNIDCommissionStructure"
+                                  [peakHourStyle]="peakHourStyle"
+                                  [isSameForAll]="isSameForAllNid"
+                                  [operators]="operators"
+                                  [isRetailerCategorySelected]="isRetailerCategorySelected"
+                                  [isPeakHourDefinitionSelected]="isPeakHourDefinitionSelected"
+                                  [retailerCategory]="retailerCategories"
+                                  (invokeHandleSameForAll)="handleSameForAll($event)"
+                                  (invokeAddSlab)="addSlab($event)"
+                                  (invokeRemoveSlab)="removeSlab($event)"></app-commission-structure>
+
+        <div>
+            From Date:
+            <p-calendar [(ngModel)]="fromDate" [showIcon]=true></p-calendar>
+            To Date:
+            <p-calendar [(ngModel)]="toDate" [showIcon]=true></p-calendar>
+        </div>
+
+        <app-commission-structure [commissionStructure]="getCommissionStructure('specialDateCommissionStructure')"
+                                  [commissionStructureType]="commissionStructureTypes.specialDateCommissionStructure"
+                                  [commissionStructureName]="commissionStructureNames.specialDateCommissionStructure"
+                                  [peakHourStyle]="peakHourStyle"
+                                  [isSameForAll]="isSameForAllSpecialCommission"
+                                  [operators]="operators"
+                                  [isRetailerCategorySelected]="isRetailerCategorySelected"
+                                  [isPeakHourDefinitionSelected]="isPeakHourDefinitionSelected"
+                                  [retailerCategory]="retailerCategories"
+                                  (invokeHandleSameForAll)="handleSameForAll($event)"
+                                  (invokeAddSlab)="addSlab($event)"
+                                  (invokeRemoveSlab)="removeSlab($event)"></app-commission-structure>
+
+        <br>
+        <button *ngIf="action == 'new' || action == 'copy' || action == null" class="btn btn-outline-success" (click)="onSubmit()">Submit Data</button>
+        <button *ngIf="action == 'details'" class="btn btn-outline-success" (click)="onBack()">Back</button>
+
+        <button style="margin-left: 10px" class="btn btn-outline-warning" (click)="reset()">Reset Form</button>
+
+        <br>
+        <br>
+    </form>
+</div>
+
+<div>
+    <modal #myModal>
+        <modal-header>
+            <h1>Material Picker</h1>
+        </modal-header>
+        <modal-content>
+            Brand:
+            <p-dropdown [options]="brands"
+                        id="brand"
+                        [(ngModel)]="selectedBrand"
+                        placeholder="Select a brand"
+            ></p-dropdown>
+
+            Sim Type:
+            <p-dropdown [options]="simTypes"
+                        id="simTypes"
+                        [(ngModel)]="selectedSimType"
+                        placeholder="Select a sim type"
+            ></p-dropdown>
+
+            <br>
+            <br>
+            Product Type:
+            <p-multiSelect
+                    id="productType"
+                    [options]="productTypes"
+                    [(ngModel)]="selectedProductType"
+                    defaultLabel="Select a product type"
+            ></p-multiSelect>
+            <br>
+            <br>
+
+            <button class="btn btn-outline-success" (click)="loadMaterialData([])">Load Data</button>
+
+            <br>
+            <br>
+
+            &nbsp;&nbsp; Select Material:
+            <p-multiSelect
+                    [options]="materials"
+                    [(ngModel)]="selectedMaterials"
+                    defaultLabel="Select Materials"
+            ></p-multiSelect>
+        </modal-content>
+        <modal-footer>
+            <button class="btn btn-primary" (click)="closeModal()">close</button>
+        </modal-footer>
+    </modal>
+</div>
