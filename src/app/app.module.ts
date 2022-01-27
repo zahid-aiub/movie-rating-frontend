@@ -27,6 +27,7 @@ import {FilmComponent} from './film/film.component';
 import {GenreComponent} from './genre/genre.component';
 import {PersonComponent} from './person/person.component';
 import { FilmDetailsComponent } from './film-details/film-details.component';
+import { PersonDetailsComponent } from './person-details/person-details.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { FilmDetailsComponent } from './film-details/film-details.component';
         FilmComponent,
         GenreComponent,
         PersonComponent,
-        FilmDetailsComponent
+        FilmDetailsComponent,
+        PersonDetailsComponent
 
     ],
     imports: [

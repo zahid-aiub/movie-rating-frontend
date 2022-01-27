@@ -27,8 +27,8 @@
             <ng-template pTemplate="body" let-person>
                 <tr>
                     <td>{{person.id}}</td>
-                    <td><a style="cursor: pointer; color: #3763ea"
-                           (click)="personDetailsById(person.id)">{{person.name}}</a></td>
+                    <td>
+                        <div><label class="cstm-hover" routerLink="details/{{ person.id }}/">{{person.name}}</label></div>
                     <td>{{person.sex}}</td>
                     <td>{{person.dob}}</td>
                     <td>{{person.type.toUpperCase()}}</td>

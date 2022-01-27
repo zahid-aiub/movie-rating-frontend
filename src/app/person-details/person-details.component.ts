@@ -11,84 +11,62 @@ import {PersonService} from "../core/services/person/person.service";
 import {ErrorHandlerService} from "../core/services/error-handler.service";
 
 @Component({
-    selector: 'app-film-details',
-    templateUrl: './film-details.component.html',
-    styleUrls: ['./film-details.component.css']
+    selector: 'app-person-details',
+    templateUrl: './person-details.component.html',
+    styleUrls: ['./person-details.component.css']
 })
-export class FilmDetailsComponent implements OnInit {
+export class PersonDetailsComponent implements OnInit {
 
-    @ViewChild('detailsModal') myModal: any;
+    @ViewChild('subFilmDetailsModal') myModal: any;
     private modalRef: any;
 
-    filmId: any;
-    film: any;
-
+    person: any;
+    personId: any;
+    films: any;
+    subFilms: any;
     subFilm: any = {
         title: '',
         description: '',
         releaseDate: '',
         rating: ''
     };
-
-    subFilms: any;
-
-    filmPersons: any;
-
-    filmGenres: any;
-
-    isSubFilm: boolean = false;
-
     subFilmPersons: any;
     subFilmGenres: any;
 
     constructor(
         private router: Router,
         private httpClient: HttpClient,
+        private filmService: FilmService,
         private modalService: ModalManager,
-        private primengConfig: PrimeNGConfig,
         private activatedRoute: ActivatedRoute,
-        private readonly filmService: FilmService
+        private messageService: MessageService,
+        private readonly personService: PersonService,
     ) {
     }
 
     ngOnInit(): void {
-        this.primengConfig.ripple = true;
-        this.filmId = this.activatedRoute.snapshot.params['id'];
-        this.populateData(this.filmId);
+        this.personId = this.activatedRoute.snapshot.params['id'];
+        this.populateData(this.personId);
     }
 
-    private populateData(filmId: any) {
-        this.filmService.getFilmsDetails(filmId).subscribe((data) => {
-            this.film = data;
-        });
-
-        this.filmService.getAllSubFilms(filmId).subscribe((data) => {
+    private populateData(personId: any) {
+        this.personService.getPersonDetails(personId).subscribe((data) => {
             console.log(data);
-            this.subFilms = data.data;
+            this.person = data;
         });
 
-        this.filmService.getFilmRating(filmId, this.isSubFilm).subscribe((data) => {
-            console.log(data);
-            this.film['rating'] = data;
+        this.filmService.getAllFilmsByPersonId(personId).subscribe((data) => {
+            console.log(data.data);
+            this.films = data.data.filter((film: any)=> film.description == 'false');
+            this.subFilms = data.data.filter((film: any)=> film.description == 'true');
         });
-
-        this.filmService.getFilmPersonList(filmId, this.isSubFilm).subscribe((data) => {
-            console.log(data);
-            this.filmPersons = data;
-        });
-
-        this.filmService.getFilmGenreList(filmId, this.isSubFilm).subscribe((data) => {
-            console.log(data);
-            this.filmGenres = data;
-        });
-
     }
 
     openModal(id: any) {
         this.populateSubFilmData(id);
         this.modalRef = this.modalService.open(this.myModal, {
             size: "lg",
-            modalClass: 'detailsModal',
+            modalClass: 'subFilmDetailsModal',
             hideCloseButton: true,
             centered: false,
             backdrop: true,
@@ -99,26 +77,27 @@ export class FilmDetailsComponent implements OnInit {
         })
     }
 
-    closeModal() {
-        this.modalService.close(this.modalRef);
-    }
-
-    private populateSubFilmData(id: any) {
+    populateSubFilmData(id: any) {
         this.subFilm = this.subFilms.filter((data: any) => data.id == id)[0];
         console.log(this.subFilm);
 
-        this.filmService.getFilmPersonList(this.subFilm.id, true).subscribe((data) => {
+        this.filmService.getFilmPersonList(id, true).subscribe((data) => {
             console.log(data);
             this.subFilmPersons = data;
         });
 
-        this.filmService.getFilmGenreList(this.subFilm.id, true).subscribe((data) => {
+        this.filmService.getFilmGenreList(id, true).subscribe((data) => {
             console.log(data);
             this.subFilmGenres = data;
         });
 
-        this.filmService.getFilmRating(this.subFilm.id, true).subscribe((data) => {
+        this.filmService.getFilmRating(id, true).subscribe((data) => {
             this.subFilm['rating'] = data;
         });
     }
+
+    closeModal() {
+        this.modalService.close(this.modalRef);
+    }
+
 }

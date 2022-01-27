@@ -25,4 +25,12 @@ export class PersonService {
                 return data;
             }), catchError(this.errorHandlerService.handleError));
     }
+
+    getPersonDetails(id: any): Observable<any> {
+        return this.httpClient.get<any>(API_URL + 'persons/' + id).pipe(
+            map((data: any) => {
+                return data;
+            }), catchError(this.errorHandlerService.handleError));
+    }
+
 }

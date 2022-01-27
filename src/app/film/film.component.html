@@ -10,8 +10,10 @@
             (click)="openModal()"
     >Add New
     </button> &nbsp;&nbsp;
-    <br>
-    <br>
+    <div style="float: right">
+        <input type="text" placeholder="search film">
+        <button>Search</button>
+    </div>
     <div>
         <p-table [value]="films">
             <ng-template pTemplate="header">
@@ -32,6 +34,7 @@
                     <td style="min-width: 130px">{{film.releaseDate}}</td>
                     <td>
                         <button class="btn btn-outline-danger" (click)="confirmDelete($event, film.id)">Delete</button>
+                        <button class="btn btn-outline-primary" (click)="openModal(film.id)">Edit</button>
                     </td>
                 </tr>
             </ng-template>
@@ -48,21 +51,17 @@
 
             <form class="form-control" [formGroup]="form">
 
-                <p-checkbox formControlName="subFilm" [binary]="true" (onChange)="handleSubFilm($event)"></p-checkbox>
-                Is Sub Film
+                <div *ngIf="isEdit">
+                    <p-checkbox formControlName="subFilm" [binary]="true"
+                                (onChange)="handleSubFilm($event)"></p-checkbox>
+                    Is Sub Film
+                </div>
                 <br>
                 <br>
 
                 <div *ngIf="isSubFilm" class="form-group" [ngClass]="displayFieldCss('filmList')">
                     <div class="col-sm-12">
                         <label for="filmList" class="control-label required">Film List</label>
-                        <!--<p-multiSelect
-                                id="filmList"
-                                class="form-control"
-                                formControlName="filmList"
-                                [options]="films"
-                                defaultLabel="Select a Film"
-                        ></p-multiSelect>-->
                         <p-dropdown
                                 id="filmList"
                                 class="form-control"
@@ -166,7 +165,8 @@
         </modal-content>
         <modal-footer>
             <button class="btn btn-outline-danger" (click)="closeModal()">Close</button> &nbsp;
-            <button class="btn btn-outline-success" (click)="onSubmit()">Create Film</button>
+            <button *ngIf="isNew" class="btn btn-outline-success" (click)="onSubmit()">Create Film</button>
+            <button *ngIf="isEdit" class="btn btn-outline-success" (click)="onSubmit()">Update</button>
         </modal-footer>
     </modal>
 </div>

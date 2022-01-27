@@ -25,6 +25,13 @@ export class FilmService {
             }), catchError(this.errorHandlerService.handleError));
     }
 
+    getAllFilmsByPersonId(personId: any): Observable<any> {
+        return this.httpClient.get<any>(API_URL + 'films/by-person/' + personId).pipe(
+            map((data: any) => {
+                return data;
+            }), catchError(this.errorHandlerService.handleError));
+    }
+
     getFilmsDetails(id: any): Observable<any> {
         return this.httpClient.get<any>(API_URL + 'films/' + id).pipe(
             map((data: any) => {

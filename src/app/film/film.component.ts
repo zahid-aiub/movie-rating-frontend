@@ -20,9 +20,11 @@ const API_URL = environment.apiUrl;
 export class FilmComponent implements OnInit {
 
     @ViewChild('myModal') myModal: any;
+    @ViewChild('editModal') editModal: any;
     private modalRef: any;
 
     films: any;
+    film: any;
     form: any;
     selectedReleaseDate: any;
     isSubFilm: boolean = false;
@@ -31,6 +33,8 @@ export class FilmComponent implements OnInit {
     selectedPersons: any;
     selectedGenres: any;
     selectedFilm: any;
+    isEdit: boolean = false;
+    isNew: boolean = false;
 
 
     constructor(
@@ -92,7 +96,7 @@ export class FilmComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.isSubFilm);
+        console.log(this.selectedPersons);
         if (this.form.valid) {
             const data: any = {};
             data.title = this.form.get('title').value;
@@ -184,7 +188,16 @@ export class FilmComponent implements OnInit {
         return data;
     }
 
-    openModal() {
+    openModal(id?: any) {
+
+        if (id) {
+            this.isEdit = true;
+            console.log(this.isEdit);
+            this.populateEditData(id);
+        } else {
+            this.isNew = true;
+            this.isEdit = false;
+        }
         this.modalRef = this.modalService.open(this.myModal, {
             size: "lg",
             modalClass: 'mymodal',
@@ -199,7 +212,28 @@ export class FilmComponent implements OnInit {
     }
 
     closeModal() {
+        this.isNew = false;
+        this.isEdit = false;
         this.modalService.close(this.modalRef);
     }
 
+    private populateEditData(id: any) {
+        this.film = this.films.filter((data: any) => data.id == id)[0];
+        this.filmService.getFilmPersonList(id, false).subscribe((data) => {
+            this.selectedPersons = data.map((a: any) => a.id);
+        });
+
+        this.filmService.getFilmGenreList(id, false).subscribe((data) => {
+            this.selectedGenres = data.map((a: any) => a.id);
+        });
+        this.form.patchValue({
+            title: this.film.title,
+            filmList: this.films,
+            description: this.film.description,
+            subFilm: false,
+            geners: this.selectedGenres,
+            filmPerson: this.selectedPersons,
+            releaseDate: new Date(this.film.releaseDate)
+        });
+    }
 }
