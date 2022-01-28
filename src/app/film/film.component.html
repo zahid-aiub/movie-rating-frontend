@@ -6,7 +6,7 @@
     <h2 style="margin-top: 5px;">Film List</h2>
     <hr>
     <br>
-    <button class="btn btn-outline-info"
+    <button style="margin-bottom: 10px;" class="btn btn-outline-info"
             (click)="openModal()"
     >Add New
     </button> &nbsp;&nbsp;
@@ -32,8 +32,8 @@
                               routerLink="films/{{ film.id }}/">{{film.title}}</span></td>
                     <td>{{film.description}}</td>
                     <td style="min-width: 130px">{{film.releaseDate}}</td>
-                    <td>
-                        <button class="btn btn-outline-danger" (click)="confirmDelete($event, film.id)">Delete</button>
+                    <td  style="min-width: 180px">
+                        <button class="btn btn-outline-danger" (click)="confirmDelete($event, film.id)">Delete</button> &nbsp;
                         <button class="btn btn-outline-primary" (click)="openModal(film.id)">Edit</button>
                     </td>
                 </tr>
@@ -51,7 +51,7 @@
 
             <form class="form-control" [formGroup]="form">
 
-                <div *ngIf="isEdit">
+                <div *ngIf="isNew">
                     <p-checkbox formControlName="subFilm" [binary]="true"
                                 (onChange)="handleSubFilm($event)"></p-checkbox>
                     Is Sub Film
@@ -119,6 +119,26 @@
                 </div>
                 <br>
 
+                <div *ngIf="isEdit" class="form-group" [ngClass]="displayFieldCss('subfilms')">
+                    <div class="col-sm-12">
+                        <label for="subfilms" class="control-label required">Sub-Film List</label>
+                        <p-multiSelect
+                                id="subfilms"
+                                class="form-control"
+                                formControlName="subfilms"
+                                [options]="subFilms"
+                                [(ngModel)]="selectedSubFilms"
+                                optionLabel="title"
+                                optionValue="id"
+                                defaultLabel="Select Sub-films"
+                        ></p-multiSelect>
+                        <app-field-error-display [displayError]="isFieldValid('subfilms')"
+                                                 errorMsg="Sub-Film is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+                <br>
+
                 <div class="form-group" [ngClass]="displayFieldCss('geners')">
                     <div class="col-sm-12">
                         <label for="geners" class="control-label required">Gener List</label>
@@ -166,7 +186,7 @@
         <modal-footer>
             <button class="btn btn-outline-danger" (click)="closeModal()">Close</button> &nbsp;
             <button *ngIf="isNew" class="btn btn-outline-success" (click)="onSubmit()">Create Film</button>
-            <button *ngIf="isEdit" class="btn btn-outline-success" (click)="onSubmit()">Update</button>
+            <button *ngIf="isEdit" class="btn btn-outline-success" (click)="update()">Update</button>
         </modal-footer>
     </modal>
 </div>

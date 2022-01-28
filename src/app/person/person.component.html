@@ -28,11 +28,16 @@
                 <tr>
                     <td>{{person.id}}</td>
                     <td>
-                        <div><label class="cstm-hover" routerLink="details/{{ person.id }}/">{{person.name}}</label></div>
+                        <div><label class="cstm-hover" routerLink="details/{{ person.id }}/">{{person.name}}</label>
+                        </div>
                     <td>{{person.sex}}</td>
                     <td>{{person.dob}}</td>
                     <td>{{person.type.toUpperCase()}}</td>
-                    <td><button class="btn btn-outline-danger"(click)="confirmDelete($event, person.id)">Delete</button></td>
+                    <td>
+                        <button class="btn btn-outline-danger" (click)="confirmDelete($event, person.id)">Delete
+                        </button>&nbsp;
+                        <button class="btn btn-outline-primary" (click)="openModal(person.id)">Edit</button>
+                    </td>
                 </tr>
             </ng-template>
         </p-table>
@@ -42,7 +47,8 @@
 <div>
     <modal #personModal>
         <modal-header>
-            <h4>Add New Person</h4>
+            <h4 *ngIf="!isEdit">Add New Person</h4>
+            <h4 *ngIf="isEdit">Update Person</h4>
         </modal-header>
         <modal-content>
 
@@ -82,7 +88,7 @@
                             <p-radioButton
                                     id="sex"
                                     formControlName="sex"
-                                    [inputId]="sex.key"
+                                    [inputId]="sex"
                                     name="sex"
                                     [value]="sex"
                                     [(ngModel)]="selectedSex"
@@ -121,8 +127,9 @@
 
         </modal-content>
         <modal-footer>
-            <button class="btn btn-outline-danger" (click)="closeModal()">Close</button>  &nbsp;
-            <button class="btn btn-outline-success" (click)="onSubmit()">Create Person</button>
+            <button class="btn btn-outline-danger" (click)="closeModal()">Close</button> &nbsp;
+            <button *ngIf="!isEdit" class="btn btn-outline-success" (click)="onSubmit()">Create Person</button>
+            <button *ngIf="isEdit" class="btn btn-outline-success" (click)="updatePerson()">Update</button>
         </modal-footer>
     </modal>
 </div>

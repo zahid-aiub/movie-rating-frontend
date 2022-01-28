@@ -35,6 +35,9 @@ export class FilmComponent implements OnInit {
     selectedFilm: any;
     isEdit: boolean = false;
     isNew: boolean = false;
+    selectedFilmId: any;
+    subFilms: any;
+    selectedSubFilms: any;
 
 
     constructor(
@@ -65,6 +68,7 @@ export class FilmComponent implements OnInit {
             geners: [null, Validators.required],
             filmPerson: [null, Validators.required],
             releaseDate: [null, Validators.required],
+            subfilms: [null],
 
         });
 
@@ -127,8 +131,33 @@ export class FilmComponent implements OnInit {
         }
     }
 
-    filmDetailsById(id: any) {
+    update() {
+        if (this.form.valid) {
+            const data: any = {};
+            data.id = this.selectedFilmId;
+            data.description = this.form.get('description').value;
+            data.releaseDate = this.convertDate(this.form.get('releaseDate').value);
+            data.filmGenreIdList = this.selectedGenres;
+            data.filmPersonIdList = this.selectedPersons;
+            data.isSubFilm = 0;
+            data.subFilmIdList = this.selectedSubFilms;
 
+            console.log(data.isSubFilm);
+            this.httpClient.put<any>(API_URL + 'films', data).subscribe(data => {
+                this.getAllFilms();
+                this.closeModal();
+                this.messageService.add({
+                    key: 'toast-key', severity: 'success', summary: 'Successful',
+                    detail: 'Film Updated successfully!'
+                });
+            });
+
+        } else {
+            this.messageService.add({
+                key: 'toast-key', severity: 'error', summary: 'Validation Failed',
+                detail: 'Form validation failed'
+            });
+        }
     }
 
     confirmDelete(event: any, id: any) {
@@ -192,7 +221,7 @@ export class FilmComponent implements OnInit {
 
         if (id) {
             this.isEdit = true;
-            console.log(this.isEdit);
+            this.selectedFilmId = id;
             this.populateEditData(id);
         } else {
             this.isNew = true;
@@ -226,6 +255,12 @@ export class FilmComponent implements OnInit {
         this.filmService.getFilmGenreList(id, false).subscribe((data) => {
             this.selectedGenres = data.map((a: any) => a.id);
         });
+
+        this.filmService.getAllSubFilms(id).subscribe((data) => {
+            this.subFilms = data.data;
+            this.selectedSubFilms = data.data.map((a: any) => a.id);
+            console.log(this.selectedSubFilms);
+        });
         this.form.patchValue({
             title: this.film.title,
             filmList: this.films,
@@ -233,7 +268,8 @@ export class FilmComponent implements OnInit {
             subFilm: false,
             geners: this.selectedGenres,
             filmPerson: this.selectedPersons,
-            releaseDate: new Date(this.film.releaseDate)
+            releaseDate: new Date(this.film.releaseDate),
+            subFilms: this.selectedSubFilms
         });
     }
 }

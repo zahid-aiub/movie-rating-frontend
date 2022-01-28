@@ -21,16 +21,24 @@ export class PersonComponent implements OnInit {
     @ViewChild('personModal') myModal: any;
     private modalRef: any;
 
-    selectedSex: any = null;
-    genders: any[] = [{name: 'Male', key: 'M'}, {name: 'Female', key: 'F'}, {name: 'Other', key: 'F'}];
+    selectedSex: any;
+    genders: any[] = [{name: 'Male'}, {name: 'Female'}, {name: 'Other'}];
 
     selectedPersonType: any = null;
     personTypes: any[] = [{name: 'Actor', key: 'A'}, {name: 'Director', key: 'D'}, {name: 'Writer', key: 'W'}];
 
 
     persons: any;
+    selectedPersonId: any;
+    selectedPerson: any = {
+        name: '',
+        dob: '',
+        sex: '',
+        type: ''
+    }
     form: any;
     selectedDOB: any;
+    isEdit: boolean = false;
 
     constructor(
         private httpClient: HttpClient,
@@ -77,7 +85,7 @@ export class PersonComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.selectedPersonType)
+        console.log(this.selectedSex)
         if (this.form.valid) {
             const data: any = {};
             data.name = this.form.get('name').value;
@@ -108,7 +116,14 @@ export class PersonComponent implements OnInit {
         return data;
     }
 
-    openModal() {
+    openModal(id?: any) {
+        if (id) {
+            this.isEdit = true;
+            this.selectedPersonId = id;
+            this.populateData(id);
+        }else {
+            this.isEdit = false;
+        }
         this.modalRef = this.modalService.open(this.myModal, {
             size: "lg",
             modalClass: 'personModal',
@@ -124,6 +139,17 @@ export class PersonComponent implements OnInit {
 
     closeModal() {
         this.modalService.close(this.modalRef);
+    }
+
+    private populateData(id: any) {
+        this.selectedPerson = this.persons.filter((item: any)=> item.id == id)[0];
+        console.log({name: this.selectedPerson.sex})
+        this.form.patchValue({
+            name: this.selectedPerson.name,
+            dob: new Date(this.selectedPerson.dob),
+            sex: {name: this.selectedPerson.sex},
+            // type: this.selectedPerson.type
+        });
     }
 
     confirmDelete(event: any, id: any) {
@@ -146,5 +172,31 @@ export class PersonComponent implements OnInit {
                 console.log("Rejected")
             }
         });
+    }
+
+    updatePerson() {
+        if (this.form.valid) {
+            const data: any = {};
+            data.id = this.selectedPersonId;
+            data.name = this.form.get('name').value;
+            data.dob = this.convertDate(this.form.get('dob').value);
+            data.sex = this.selectedSex.name;
+            data.type = this.selectedPersonType.name;
+
+            this.httpClient.put<any>(API_URL + 'persons', data).subscribe(data => {
+                this.getAllPersons();
+                this.closeModal();
+                this.messageService.add({
+                    key: 'toast-key', severity: 'success', summary: 'Successful',
+                    detail: 'Person Updated successfully!'
+                });
+            });
+
+        } else {
+            this.messageService.add({
+                key: 'toast-key', severity: 'error', summary: 'Validation Failed',
+                detail: 'Form validation failed'
+            });
+        }
     }
 }
