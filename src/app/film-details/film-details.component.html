@@ -15,7 +15,9 @@
             <td style="max-width: 200px"><label>Film Rating </label></td>
             <td>:</td>
             <td>
-                <div style="margin-left: 50px;">{{film.rating}}</div>
+                <div style="margin-left: 50px;">
+                    <p-rating [ngModel]="ratingVal" [cancel]="false" [readonly]="true"></p-rating>
+                </div>
             </td>
         </tr>
         <tr>
@@ -39,10 +41,18 @@
             <td>
                 <div style="margin-left: 45px;">
                     <table class="table table-borderless">
-                        <tr *ngFor="let sub of subFilms">
-                            <td><div><label class="cstm-hover" (click)="openModal(sub.id)">{{sub.title}}</label></div></td>
-                            <td style="margin-bottom: 5px;"><button class="btn btn-outline-primary" (click)="openEditModal(sub.id)">Edit</button></td>
-                            <hr>
+                        <tr style="border-bottom-width: 1px;" *ngFor="let sub of subFilms">
+                            <td><span style="margin-bottom: 10px;" class="cstm-hover"
+                                      (click)="openModal(sub.id)">{{sub.title}}</span></td>
+                            <td><p-rating [ngModel]="calculateRating(sub.id)" [cancel]="false" [readonly]="true"></p-rating></td>
+                            <td>{{sub.releaseDate}}</td>
+                            <td>
+                                <div style="min-width: 50px; float: right">
+                                    <button style="padding: 5px;" class="btn btn-outline-primary"
+                                            (click)="openEditModal(sub.id)">Edit
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     </table>
                 </div>

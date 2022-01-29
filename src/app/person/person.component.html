@@ -34,9 +34,11 @@
                     <td>{{person.dob}}</td>
                     <td>{{person.type.toUpperCase()}}</td>
                     <td>
-                        <button class="btn btn-outline-danger" (click)="confirmDelete($event, person.id)">Delete
-                        </button>&nbsp;
-                        <button class="btn btn-outline-primary" (click)="openModal(person.id)">Edit</button>
+                        <div>
+                            <button class="btn btn-outline-danger" (click)="confirmDelete($event, person.id)">Delete
+                            </button>&nbsp;
+                            <button class="btn btn-outline-primary" (click)="openModal(person.id)">Edit</button>
+                        </div>
                     </td>
                 </tr>
             </ng-template>

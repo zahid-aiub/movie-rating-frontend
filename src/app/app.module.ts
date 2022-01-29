@@ -28,7 +28,7 @@ import {GenreComponent} from './genre/genre.component';
 import {PersonComponent} from './person/person.component';
 import { FilmDetailsComponent } from './film-details/film-details.component';
 import { PersonDetailsComponent } from './person-details/person-details.component';
-
+import {RatingModule} from "primeng/rating";
 
 @NgModule({
     declarations: [
@@ -64,7 +64,8 @@ import { PersonDetailsComponent } from './person-details/person-details.componen
         TabViewModule,
         CheckboxModule,
         MultiSelectModule,
-        ConfirmPopupModule
+        ConfirmPopupModule,
+        RatingModule
     ],
     providers: [DatePipe, MessageService, ConfirmationService],
     bootstrap: [AppComponent]

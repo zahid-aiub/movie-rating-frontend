@@ -10,6 +10,7 @@ import {GenreService} from "../core/services/genre/genre.service";
 import {PersonService} from "../core/services/person/person.service";
 import {environment} from "../../environments/environment";
 
+
 const API_URL = environment.apiUrl;
 
 @Component({
@@ -30,7 +31,7 @@ export class FilmDetailsComponent implements OnInit {
         title: '',
         description: '',
         releaseDate: '',
-        rating: ''
+        rating: 2
     };
 
     subFilms: any;
@@ -51,6 +52,7 @@ export class FilmDetailsComponent implements OnInit {
     selectedPersons: any;
 
     // isSubFilmEdit: boolean = false;
+    ratingVal: number = 4;
 
     constructor(
         private router: Router,
@@ -95,7 +97,9 @@ export class FilmDetailsComponent implements OnInit {
 
         this.filmService.getFilmRating(filmId, this.isSubFilm).subscribe((data) => {
             console.log(data);
+            // this.film['rating'] = 4;
             this.film['rating'] = data;
+            this.ratingVal = 4;
         });
 
         this.filmService.getFilmPersonList(filmId, this.isSubFilm).subscribe((data) => {
@@ -146,8 +150,18 @@ export class FilmDetailsComponent implements OnInit {
         });
 
         this.filmService.getFilmRating(this.subFilm.id, true).subscribe((data) => {
-            this.subFilm['rating'] = data;
+            // this.subFilm['rating'] = data;
+            this.subFilm['rating'] = 3;
         });
+    }
+
+    calculateRating(id: any) {
+        // this.filmService.getFilmRating(id, true).subscribe((data) => {
+        //     console.log(data);
+        //     return data;
+        // });
+        console.log(id);
+        return 4.5;
     }
 
     isFieldValid(field: string) {
