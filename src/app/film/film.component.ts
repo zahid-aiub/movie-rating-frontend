@@ -78,21 +78,21 @@ export class FilmComponent implements OnInit {
         localStorage.setItem(key, value);
     }
 
-    private getAllFilms() {
+    getAllFilms() {
         this.filmService.getAllFilms().subscribe((data) => {
             console.log(data);
             this.films = data.data;
         });
     }
 
-    private getAllGenre() {
+    getAllGenre() {
         this.genreService.getAllGenre().subscribe((data) => {
             console.log(data.data);
             this.genres = data.data;
         });
     }
 
-    private getAllPersons() {
+    getAllPersons() {
         this.personService.getAllPersons().subscribe((data) => {
             console.log(data.data);
             this.persons = data.data;
@@ -259,8 +259,9 @@ export class FilmComponent implements OnInit {
         this.filmService.getAllSubFilms(id).subscribe((data) => {
             this.subFilms = data.data;
             this.selectedSubFilms = data.data.map((a: any) => a.id);
-            console.log(this.selectedSubFilms);
+            console.log("================== ", this.selectedSubFilms)
         });
+        console.log("******************* ", this.selectedSubFilms)
         this.form.patchValue({
             title: this.film.title,
             filmList: this.films,

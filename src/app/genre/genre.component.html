@@ -19,7 +19,6 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Created At</th>
-                    <th>Action</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-genre>
@@ -28,7 +27,6 @@
                     <td><a style="cursor: pointer; color: #3763ea"
                            (click)="genreDetailsById(genre.id)">{{genre.name}}</a></td>
                     <td>{{genre.createdAt}}</td>
-                    <td><button class="btn btn-outline-danger"(click)="delete(genre.id)">Delete</button></td>
                 </tr>
             </ng-template>
         </p-table>

@@ -1,14 +1,16 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {ModalManager} from "ngb-modal";
 import {DatePipe} from "@angular/common";
-import {ConfirmationService, MessageService, PrimeNGConfig} from "primeng/api";
+import {MessageService, PrimeNGConfig} from "primeng/api";
 import {FilmService} from "../core/services/film/film.service";
 import {GenreService} from "../core/services/genre/genre.service";
 import {PersonService} from "../core/services/person/person.service";
-import {ErrorHandlerService} from "../core/services/error-handler.service";
+import {environment} from "../../environments/environment";
+
+const API_URL = environment.apiUrl;
 
 @Component({
     selector: 'app-film-details',
@@ -17,7 +19,8 @@ import {ErrorHandlerService} from "../core/services/error-handler.service";
 })
 export class FilmDetailsComponent implements OnInit {
 
-    @ViewChild('detailsModal') myModal: any;
+    @ViewChild('detailsModal') detailsModal: any;
+    @ViewChild('editSubFilmModal') editSubFilmModal: any;
     private modalRef: any;
 
     filmId: any;
@@ -40,12 +43,25 @@ export class FilmDetailsComponent implements OnInit {
 
     subFilmPersons: any;
     subFilmGenres: any;
+    form: any;
+    selectedReleaseDate: any;
+    genres: any;
+    selectedGenres: any;
+    persons: any;
+    selectedPersons: any;
+
+    // isSubFilmEdit: boolean = false;
 
     constructor(
         private router: Router,
         private httpClient: HttpClient,
+        private formBuilder: FormBuilder,
+        private genreService: GenreService,
         private modalService: ModalManager,
+        private readonly datePipe: DatePipe,
         private primengConfig: PrimeNGConfig,
+        private personService: PersonService,
+        private messageService: MessageService,
         private activatedRoute: ActivatedRoute,
         private readonly filmService: FilmService
     ) {
@@ -55,6 +71,16 @@ export class FilmDetailsComponent implements OnInit {
         this.primengConfig.ripple = true;
         this.filmId = this.activatedRoute.snapshot.params['id'];
         this.populateData(this.filmId);
+        this.getAllPersons();
+        this.getAllGenre();
+        this.form = this.formBuilder.group({
+            title: [null, Validators.required],
+            description: [null],
+            genre: [null, Validators.required],
+            filmPerson: [null, Validators.required],
+            releaseDate: [null, Validators.required],
+
+        });
     }
 
     private populateData(filmId: any) {
@@ -86,7 +112,7 @@ export class FilmDetailsComponent implements OnInit {
 
     openModal(id: any) {
         this.populateSubFilmData(id);
-        this.modalRef = this.modalService.open(this.myModal, {
+        this.modalRef = this.modalService.open(this.detailsModal, {
             size: "lg",
             modalClass: 'detailsModal',
             hideCloseButton: true,
@@ -110,15 +136,107 @@ export class FilmDetailsComponent implements OnInit {
         this.filmService.getFilmPersonList(this.subFilm.id, true).subscribe((data) => {
             console.log(data);
             this.subFilmPersons = data;
+            this.selectedPersons = data.map((a: any) => a.id);
         });
 
         this.filmService.getFilmGenreList(this.subFilm.id, true).subscribe((data) => {
             console.log(data);
             this.subFilmGenres = data;
+            this.selectedGenres = data.map((a: any) => a.id);
         });
 
         this.filmService.getFilmRating(this.subFilm.id, true).subscribe((data) => {
             this.subFilm['rating'] = data;
+        });
+    }
+
+    isFieldValid(field: string) {
+        return !this.form.get(field).valid && this.form.get(field).touched;
+    }
+
+    displayFieldCss(field: string) {
+        return {
+            'has-error': this.isFieldValid(field),
+            'has-feedback': this.isFieldValid(field)
+        };
+    }
+
+    update() {
+        console.log("Data: ", this.selectedPersons)
+        console.log("Data: ", this.selectedGenres)
+        if (this.form.valid) {
+            const data: any = {};
+            data.id = this.subFilm.id;
+            data.description = this.form.get('description').value;
+            data.releaseDate = this.convertDate(this.form.get('releaseDate').value);
+            data.filmGenreIdList = this.selectedGenres;
+            data.filmPersonIdList = this.selectedPersons;
+            data.isSubFilm = 1;
+
+            console.log(data.isSubFilm);
+            this.httpClient.put<any>(API_URL + 'films', data).subscribe(data => {
+                this.refreshSubFilms();
+                this.closeModal();
+                this.messageService.add({
+                    key: 'toast-key', severity: 'success', summary: 'Successful',
+                    detail: 'Film Updated successfully!'
+                });
+            });
+
+        } else {
+            this.messageService.add({
+                key: 'toast-key', severity: 'error', summary: 'Validation Failed',
+                detail: 'Form validation failed'
+            });
+        }
+    }
+
+    refreshSubFilms() {
+        this.filmService.getAllSubFilms(this.filmId).subscribe((data) => {
+            this.subFilms = data.data;
+        });
+    }
+
+    convertDate(date: Date | undefined): string {
+        let data = this.datePipe.transform(date, 'yyyy-MM-dd') + "";
+        return data;
+    }
+
+    openEditModal(id: any) {
+        this.populateSubFilmData(id);
+        this.populateSingleData();
+        this.modalRef = this.modalService.open(this.editSubFilmModal, {
+            size: "lg",
+            modalClass: 'editSubFilmModal',
+            hideCloseButton: true,
+            centered: false,
+            backdrop: true,
+            animation: true,
+            keyboard: false,
+            closeOnOutsideClick: false,
+            backdropClass: "modal-backdrop"
+        })
+    }
+
+    populateSingleData() {
+        this.form.patchValue({
+            title: this.subFilm.title,
+            description: this.subFilm.description,
+            genre: this.selectedGenres,
+            filmPerson: this.selectedPersons,
+            releaseDate: new Date(this.subFilm.releaseDate)
+        });
+    }
+
+    getAllGenre() {
+        this.genreService.getAllGenre().subscribe((data) => {
+            this.genres = data.data;
+        });
+    }
+
+    getAllPersons() {
+        this.personService.getAllPersons().subscribe((data) => {
+            this.persons = data.data;
         });
     }
 }
