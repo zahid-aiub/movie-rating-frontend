@@ -91,9 +91,9 @@ export class PersonDetailsComponent implements OnInit {
             this.subFilmGenres = data;
         });
 
-        this.filmService.getFilmRating(id, true).subscribe((data) => {
+/*        this.filmService.getFilmRating(id, true).subscribe((data) => {
             this.subFilm['rating'] = data;
-        });
+        });*/
     }
 
     closeModal() {

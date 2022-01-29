@@ -39,6 +39,7 @@ export class FilmComponent implements OnInit {
     subFilms: any;
     selectedSubFilms: any;
     searchTxt: any;
+    ratingVal: number | undefined;
 
 
     constructor(
@@ -63,6 +64,7 @@ export class FilmComponent implements OnInit {
         this.getAllPersons();
         this.form = this.formBuilder.group({
             title: [null, Validators.required],
+            rating: [null],
             filmList: [null],
             description: [null],
             subFilm: [null],
@@ -102,7 +104,6 @@ export class FilmComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.selectedPersons);
         if (this.form.valid) {
             const data: any = {};
             data.title = this.form.get('title').value;
@@ -111,6 +112,7 @@ export class FilmComponent implements OnInit {
             data.personIdList = this.selectedPersons;
             data.genreIdList = this.selectedGenres;
             data.isSubFilm = this.isSubFilm ? 1 : 0;
+            data.zrating = this.ratingVal;
             if (this.isSubFilm) {
                 data.parentFilmId = this.selectedFilm.id;
             }
@@ -143,6 +145,7 @@ export class FilmComponent implements OnInit {
             data.filmPersonIdList = this.selectedPersons;
             data.isSubFilm = 0;
             data.subFilmIdList = this.selectedSubFilms;
+            data.zrating = this.ratingVal;
 
             console.log(data.isSubFilm);
             this.httpClient.put<any>(API_URL + 'films', data).subscribe(data => {
@@ -266,6 +269,7 @@ export class FilmComponent implements OnInit {
         console.log("******************* ", this.selectedSubFilms)
         this.form.patchValue({
             title: this.film.title,
+            rating: this.film.z_rating,
             filmList: this.films,
             description: this.film.description,
             subFilm: false,

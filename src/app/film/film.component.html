@@ -33,8 +33,9 @@
                               routerLink="films/{{ film.id }}/">{{film.title}}</span></td>
                     <td>{{film.description}}</td>
                     <td style="min-width: 130px">{{film.releaseDate}}</td>
-                    <td  style="min-width: 180px">
-                        <button class="btn btn-outline-danger" (click)="confirmDelete($event, film.id)">Delete</button> &nbsp;
+                    <td style="min-width: 180px">
+                        <button class="btn btn-outline-danger" (click)="confirmDelete($event, film.id)">Delete</button>
+                        &nbsp;
                         <button class="btn btn-outline-primary" (click)="openModal(film.id)">Edit</button>
                     </td>
                 </tr>
@@ -86,6 +87,19 @@
                         <input type="text" id="title" class="form-control"
                                formControlName="title">
                         <app-field-error-display [displayError]="isFieldValid('title')"
+                                                 errorMsg="Film Name is required">
+                        </app-field-error-display>
+                    </div>
+                </div>
+
+                <div class="form-group" [ngClass]="displayFieldCss('rating')">
+                    <div class="col-sm-12">
+                        <label for="rating" class="control-label required">Film/Sub Film Name</label>
+
+                        <p-rating id="rating" class="form-control"
+                                  formControlName="rating" [(ngModel)]="ratingVal" [cancel]="false" ></p-rating>
+
+                        <app-field-error-display [displayError]="isFieldValid('rating')"
                                                  errorMsg="Film Name is required">
                         </app-field-error-display>
                     </div>

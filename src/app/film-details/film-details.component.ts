@@ -51,8 +51,8 @@ export class FilmDetailsComponent implements OnInit {
     persons: any;
     selectedPersons: any;
 
-    // isSubFilmEdit: boolean = false;
-    ratingVal: number = 4;
+    ratingVal: number | undefined;
+    filmRating: number | undefined;
 
     constructor(
         private router: Router,
@@ -77,6 +77,7 @@ export class FilmDetailsComponent implements OnInit {
         this.getAllGenre();
         this.form = this.formBuilder.group({
             title: [null, Validators.required],
+            rating: [null],
             description: [null],
             genre: [null, Validators.required],
             filmPerson: [null, Validators.required],
@@ -88,6 +89,7 @@ export class FilmDetailsComponent implements OnInit {
     private populateData(filmId: any) {
         this.filmService.getFilmsDetails(filmId).subscribe((data) => {
             this.film = data;
+            this.filmRating = data.z_rating;
         });
 
         this.filmService.getAllSubFilms(filmId).subscribe((data) => {
@@ -95,12 +97,10 @@ export class FilmDetailsComponent implements OnInit {
             this.subFilms = data.data;
         });
 
-        this.filmService.getFilmRating(filmId, this.isSubFilm).subscribe((data) => {
+/*        this.filmService.getFilmRating(filmId, this.isSubFilm).subscribe((data) => {
             console.log(data);
-            // this.film['rating'] = 4;
             this.film['rating'] = data;
-            this.ratingVal = 4;
-        });
+        });*/
 
         this.filmService.getFilmPersonList(filmId, this.isSubFilm).subscribe((data) => {
             console.log(data);
@@ -149,19 +149,15 @@ export class FilmDetailsComponent implements OnInit {
             this.selectedGenres = data.map((a: any) => a.id);
         });
 
-        this.filmService.getFilmRating(this.subFilm.id, true).subscribe((data) => {
+/*        this.filmService.getFilmRating(this.subFilm.id, true).subscribe((data) => {
             // this.subFilm['rating'] = data;
             this.subFilm['rating'] = 3;
-        });
+        });*/
     }
 
     calculateRating(id: any) {
-        // this.filmService.getFilmRating(id, true).subscribe((data) => {
-        //     console.log(data);
-        //     return data;
-        // });
-        console.log(id);
-        return 4.5;
+        console.log("======================", id);
+        return this.subFilms.filter((item: any)=> item.id == id)[0].z_rating;
     }
 
     isFieldValid(field: string) {
@@ -182,6 +178,7 @@ export class FilmDetailsComponent implements OnInit {
             const data: any = {};
             data.id = this.subFilm.id;
             data.description = this.form.get('description').value;
+            data.zrating = this.ratingVal;
             data.releaseDate = this.convertDate(this.form.get('releaseDate').value);
             data.filmGenreIdList = this.selectedGenres;
             data.filmPersonIdList = this.selectedPersons;
@@ -235,6 +232,7 @@ export class FilmDetailsComponent implements OnInit {
     populateSingleData() {
         this.form.patchValue({
             title: this.subFilm.title,
+            rating: this.subFilm.z_rating,
             description: this.subFilm.description,
             genre: this.selectedGenres,
             filmPerson: this.selectedPersons,
