@@ -38,6 +38,7 @@ export class FilmComponent implements OnInit {
     selectedFilmId: any;
     subFilms: any;
     selectedSubFilms: any;
+    searchTxt: any;
 
 
     constructor(
@@ -79,6 +80,7 @@ export class FilmComponent implements OnInit {
     }
 
     getAllFilms() {
+        this.searchTxt = '';
         this.filmService.getAllFilms().subscribe((data) => {
             console.log(data);
             this.films = data.data;
@@ -271,6 +273,12 @@ export class FilmComponent implements OnInit {
             filmPerson: this.selectedPersons,
             releaseDate: new Date(this.film.releaseDate),
             subFilms: this.selectedSubFilms
+        });
+    }
+
+    searchData() {
+        this.filmService.searchFilms(this.searchTxt).subscribe((data) => {
+            this.films = data.data;
         });
     }
 }

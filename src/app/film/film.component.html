@@ -11,8 +11,9 @@
     >Add New
     </button> &nbsp;&nbsp;
     <div style="float: right">
-        <input type="text" placeholder="search film">
-        <button>Search</button>
+        <input [(ngModel)]="searchTxt" type="text" placeholder="search film">
+        <button (click)="searchData()">Search</button> &nbsp;
+        <button (click)="getAllFilms()">Refresh</button>
     </div>
     <div>
         <p-table [value]="films">
