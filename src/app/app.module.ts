@@ -29,6 +29,7 @@ import {PersonComponent} from './person/person.component';
 import { FilmDetailsComponent } from './film-details/film-details.component';
 import { PersonDetailsComponent } from './person-details/person-details.component';
 import {RatingModule} from "primeng/rating";
+import { UserComponent } from './user/user.component';
 
 @NgModule({
     declarations: [
@@ -40,7 +41,8 @@ import {RatingModule} from "primeng/rating";
         GenreComponent,
         PersonComponent,
         FilmDetailsComponent,
-        PersonDetailsComponent
+        PersonDetailsComponent,
+        UserComponent
 
     ],
     imports: [

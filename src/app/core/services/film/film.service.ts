@@ -74,4 +74,11 @@ export class FilmService {
             }), catchError(this.errorHandlerService.handleError));
     }
 
+    getAllUsers(): Observable<any> {
+        return this.httpClient.get<any>(API_URL + 'users').pipe(
+            map((data: any) => {
+                return data;
+            }), catchError(this.errorHandlerService.handleError));
+    }
+
 }

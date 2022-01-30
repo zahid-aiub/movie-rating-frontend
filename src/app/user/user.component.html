@@ -1,0 +1,86 @@
+<div class="container">
+    <p-toast key="toast-key"
+             position="top-right"
+    ></p-toast>
+    <p-confirmPopup></p-confirmPopup>
+    <h2 style="margin-top: 5px;">Film Rate</h2>
+    <hr>
+    <br>
+
+    <div>
+        <table class="table table-borderless">
+            <tr>
+                <td>User</td>
+                <td>:</td>
+                <td>
+                    <div>
+                        <p-dropdown
+                                [options]="users"
+                                [(ngModel)]="selectedUser"
+                                placeholder="Select a User"
+                                optionLabel="name"
+                                [showClear]="true">
+                        </p-dropdown>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Film List</td>
+                <td>:</td>
+                <td>
+                    <div>
+                        <p-dropdown
+                                [options]="films"
+                                [(ngModel)]="selectedFilm"
+                                placeholder="Select a Film"
+                                optionLabel="title"
+                                [showClear]="true"
+                                (onChange)="handleSubFilmClick($event)"
+                        >
+                        </p-dropdown>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td>:</td>
+                <td>
+
+                    <table>
+                        <tr>
+                            <td>{{selectedFilm.title}}</td>
+                            <td>
+                                <p-rating [(ngModel)]="rating" [cancel]="false" [readonly]="false"></p-rating>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-primary" (click)="rateToFilm(selectedFilm.id)">Rate</button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Sub Film List</td>
+                <td>:</td>
+                <td>
+                    <table class="table table-borderless">
+                        <tr style="border-bottom-width: 1px;" *ngFor="let sub of subFilms">
+                            <td><span style="margin-bottom: 10px;"
+                                      >{{sub.title}}</span></td>
+                            <td><p-rating [(ngModel)]="sub.z_rating" [cancel]="false" [readonly]="false"></p-rating></td>
+                            <td>
+                                <div style="min-width: 50px; float: right">
+                                    <button style="padding: 5px;" class="btn btn-outline-primary" (click)="rateToSubFilmFilm(sub.id)">Rate</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
