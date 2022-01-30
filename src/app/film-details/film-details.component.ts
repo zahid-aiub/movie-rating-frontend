@@ -156,7 +156,6 @@ export class FilmDetailsComponent implements OnInit {
     }
 
     calculateRating(id: any) {
-        console.log("======================", id);
         return this.subFilms.filter((item: any)=> item.id == id)[0].z_rating;
     }
 

@@ -56,9 +56,26 @@ export class PersonDetailsComponent implements OnInit {
         });
 
         this.filmService.getAllFilmsByPersonId(personId).subscribe((data) => {
-            console.log(data.data);
-            this.films = data.data.filter((film: any)=> film.description == 'false');
-            this.subFilms = data.data.filter((film: any)=> film.description == 'true');
+            console.log(data);
+            let resData: any = [];
+
+            data.forEach((item: any) => {
+                const res: any =  {};
+                res.id = item[0];
+                res.isSubFilm = item[1];
+                res.releaseDate = item[2];
+                res.title = item[3];
+                res.rating = item[4];
+                resData.push(res);
+            });
+
+            console.log(resData);
+            this.films = resData;
+
+            this.films = resData.filter((film: any)=> film.isSubFilm == 'false');
+            this.subFilms = resData.filter((film: any)=> film.isSubFilm == 'true');
+            console.log(this.films);
+            console.log(this.subFilms);
         });
     }
 
@@ -91,13 +108,16 @@ export class PersonDetailsComponent implements OnInit {
             this.subFilmGenres = data;
         });
 
-/*        this.filmService.getFilmRating(id, true).subscribe((data) => {
-            this.subFilm['rating'] = data;
-        });*/
+        /*        this.filmService.getFilmRating(id, true).subscribe((data) => {
+                    this.subFilm['rating'] = data;
+                });*/
     }
 
     closeModal() {
         this.modalService.close(this.modalRef);
     }
 
+    calculateRating(id: any) {
+        return this.subFilms.filter((item: any)=> item.id == id)[0].rating;
+    }
 }
