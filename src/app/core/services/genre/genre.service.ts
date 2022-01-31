@@ -25,4 +25,11 @@ export class GenreService {
             }), catchError(this.errorHandlerService.handleError));
     }
 
+    getGenreById(id: any): Observable<any> {
+        return this.httpClient.get<any>(API_URL + 'genres/' + id).pipe(
+            map((data: any) => {
+                return data;
+            }), catchError(this.errorHandlerService.handleError));
+    }
+
 }

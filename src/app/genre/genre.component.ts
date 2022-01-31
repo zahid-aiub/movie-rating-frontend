@@ -111,10 +111,6 @@ export class GenreComponent implements OnInit {
         this.modalService.close(this.modalRef);
     }
 
-    genreDetailsById(id: any) {
-
-    }
-
     delete(id: number) {
         console.log(id);
 

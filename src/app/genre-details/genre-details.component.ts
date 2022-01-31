@@ -1,23 +1,23 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
+import {FilmService} from "../core/services/film/film.service";
 import {ModalManager} from "ngb-modal";
 import {MessageService} from "primeng/api";
-import {FilmService} from "../core/services/film/film.service";
 import {PersonService} from "../core/services/person/person.service";
+import {GenreService} from "../core/services/genre/genre.service";
 
 @Component({
-    selector: 'app-person-details',
-    templateUrl: './person-details.component.html',
-    styleUrls: ['./person-details.component.css']
+    selector: 'app-genre-details',
+    templateUrl: './genre-details.component.html',
+    styleUrls: ['./genre-details.component.css']
 })
-export class PersonDetailsComponent implements OnInit {
+export class GenreDetailsComponent implements OnInit {
 
-    @ViewChild('subFilmDetailsModal') myModal: any;
+    @ViewChild('genreDetailsModal') myModal: any;
     private modalRef: any;
 
-    person: any;
-    personId: any;
+    genre: any;
     films: any;
     subFilms: any;
     subFilm: any = {
@@ -26,8 +26,10 @@ export class PersonDetailsComponent implements OnInit {
         releaseDate: '',
         rating: ''
     };
+
     subFilmPersons: any;
     subFilmGenres: any;
+    genreId: any;
 
     constructor(
         private router: Router,
@@ -36,22 +38,22 @@ export class PersonDetailsComponent implements OnInit {
         private modalService: ModalManager,
         private activatedRoute: ActivatedRoute,
         private messageService: MessageService,
-        private readonly personService: PersonService,
+        private readonly genreService: GenreService,
     ) {
     }
 
     ngOnInit(): void {
-        this.personId = this.activatedRoute.snapshot.params['id'];
-        this.populateData(this.personId);
+        this.genreId = this.activatedRoute.snapshot.params['id'];
+        this.populateData(this.genreId);
     }
 
-    private populateData(personId: any) {
-        this.personService.getPersonDetails(personId).subscribe((data) => {
+    private populateData(genreId: any) {
+        this.genreService.getGenreById(genreId).subscribe((data) => {
             console.log(data);
-            this.person = data;
+            this.genre = data;
         });
 
-        this.filmService.getAllFilmsByPersonId(personId).subscribe((data) => {
+        this.filmService.getAllFilmsByGenreId(genreId).subscribe((data) => {
             let resData: any = [];
 
             data.forEach((item: any) => {
@@ -63,7 +65,6 @@ export class PersonDetailsComponent implements OnInit {
                 res.rating = item[4];
                 resData.push(res);
             });
-
             this.films = resData;
 
             this.films = resData.filter((film: any) => film.isSubFilm == 'false');
@@ -71,11 +72,12 @@ export class PersonDetailsComponent implements OnInit {
         });
     }
 
+
     openModal(id: any) {
         this.populateSubFilmData(id);
         this.modalRef = this.modalService.open(this.myModal, {
             size: "lg",
-            modalClass: 'subFilmDetailsModal',
+            modalClass: 'genreDetailsModal',
             hideCloseButton: true,
             centered: false,
             backdrop: true,
@@ -108,4 +110,5 @@ export class PersonDetailsComponent implements OnInit {
     calculateRating(id: any) {
         return this.subFilms.filter((item: any) => item.id == id)[0].rating;
     }
+
 }

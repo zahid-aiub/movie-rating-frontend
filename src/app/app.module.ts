@@ -31,6 +31,7 @@ import { PersonDetailsComponent } from './person-details/person-details.componen
 import {RatingModule} from "primeng/rating";
 import { UserComponent } from './user/user.component';
 import { SuggestionComponent } from './suggestion/suggestion.component';
+import { GenreDetailsComponent } from './genre-details/genre-details.component';
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import { SuggestionComponent } from './suggestion/suggestion.component';
         FilmDetailsComponent,
         PersonDetailsComponent,
         UserComponent,
-        SuggestionComponent
+        SuggestionComponent,
+        GenreDetailsComponent
 
     ],
     imports: [

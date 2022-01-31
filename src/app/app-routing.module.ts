@@ -8,6 +8,7 @@ import {FilmDetailsComponent} from "./film-details/film-details.component";
 import {PersonDetailsComponent} from "./person-details/person-details.component";
 import {UserComponent} from "./user/user.component";
 import {SuggestionComponent} from "./suggestion/suggestion.component";
+import {GenreDetailsComponent} from "./genre-details/genre-details.component";
 
 const routes: Routes = [
     {path: '', component: FilmComponent},
@@ -15,6 +16,7 @@ const routes: Routes = [
     {path: 'person', component: PersonComponent},
     {path: 'person/details/:id', component: PersonDetailsComponent},
     {path: 'genre', component: GenreComponent},
+    {path: 'genres/:id', component: GenreDetailsComponent},
     {path: 'user', component: UserComponent},
     {path: 'suggestion', component: SuggestionComponent},
     {path: '**', component: PageNotFoundComponent},

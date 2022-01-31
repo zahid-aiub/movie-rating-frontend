@@ -24,8 +24,9 @@
             <ng-template pTemplate="body" let-genre>
                 <tr>
                     <td>{{genre.id}}</td>
-                    <td><a style="cursor: pointer; color: #3763ea"
-                           (click)="genreDetailsById(genre.id)">{{genre.name}}</a></td>
+                    <td><span style="cursor: pointer; color: #3763ea"
+                              routerLink="/genres/{{ genre.id }}/">{{genre.name}}</span>
+                    </td>
                     <td>{{genre.createdAt}}</td>
                 </tr>
             </ng-template>
@@ -60,7 +61,7 @@
 
         </modal-content>
         <modal-footer>
-            <button class="btn btn-outline-danger" (click)="closeModal()">Close</button>  &nbsp;
+            <button class="btn btn-outline-danger" (click)="closeModal()">Close</button> &nbsp;
             <button class="btn btn-outline-success" (click)="onSubmit()">Create Genre</button>
         </modal-footer>
     </modal>

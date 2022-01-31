@@ -39,6 +39,13 @@ export class FilmService {
             }), catchError(this.errorHandlerService.handleError));
     }
 
+    getAllFilmsByGenreId(genreId: any): Observable<any> {
+        return this.httpClient.get<any>(API_URL + 'films/by-genre/' + genreId).pipe(
+            map((data: any) => {
+                return data;
+            }), catchError(this.errorHandlerService.handleError));
+    }
+
     getFilmsDetails(id: any): Observable<any> {
         return this.httpClient.get<any>(API_URL + 'films/' + id).pipe(
             map((data: any) => {
