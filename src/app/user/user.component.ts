@@ -1,14 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {FormBuilder} from "@angular/forms";
-import {ModalManager} from "ngb-modal";
-import {DatePipe} from "@angular/common";
-import {ConfirmationService, MessageService, PrimeNGConfig} from "primeng/api";
+import {MessageService} from "primeng/api";
 import {FilmService} from "../core/services/film/film.service";
-import {GenreService} from "../core/services/genre/genre.service";
-import {PersonService} from "../core/services/person/person.service";
-import {ErrorHandlerService} from "../core/services/error-handler.service";
 
 
 const API_URL = environment.apiUrl;
@@ -37,21 +31,12 @@ export class UserComponent implements OnInit {
 
     constructor(
         private httpClient: HttpClient,
-        private formBuilder: FormBuilder,
-        private modalService: ModalManager,
-        private readonly datePipe: DatePipe,
-        private primengConfig: PrimeNGConfig,
         private messageService: MessageService,
-        private readonly filmService: FilmService,
-        private readonly genreService: GenreService,
-        private readonly personService: PersonService,
-        private confirmationService: ConfirmationService,
-        private errorHandlerService: ErrorHandlerService,
+        private readonly filmService: FilmService
     ) {
     }
 
     ngOnInit(): void {
-        this.primengConfig.ripple = true;
         this.getAllUsers();
         this.getAllFilms();
     }

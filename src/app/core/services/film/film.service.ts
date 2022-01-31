@@ -81,4 +81,10 @@ export class FilmService {
             }), catchError(this.errorHandlerService.handleError));
     }
 
+    suggestedFilms(id: any) {
+        return this.httpClient.get<any>(API_URL + 'films/suggested', {params: {userId: id}}).pipe(
+            map((data: any) => {
+                return data;
+            }), catchError(this.errorHandlerService.handleError));
+    }
 }
