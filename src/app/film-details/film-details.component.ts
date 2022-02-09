@@ -97,11 +97,6 @@ export class FilmDetailsComponent implements OnInit {
             this.subFilms = data.data;
         });
 
-/*        this.filmService.getFilmRating(filmId, this.isSubFilm).subscribe((data) => {
-            console.log(data);
-            this.film['rating'] = data;
-        });*/
-
         this.filmService.getFilmPersonList(filmId, this.isSubFilm).subscribe((data) => {
             console.log(data);
             this.filmPersons = data;

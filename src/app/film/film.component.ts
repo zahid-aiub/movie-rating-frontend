@@ -40,6 +40,7 @@ export class FilmComponent implements OnInit {
     selectedSubFilms: any;
     searchTxt: any;
     ratingVal: number | undefined;
+    isShow: boolean = false;
 
 
     constructor(

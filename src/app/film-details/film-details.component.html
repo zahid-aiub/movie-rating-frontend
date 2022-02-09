@@ -116,7 +116,9 @@
                         <td style="max-width: 200px"><label>Film Rating </label></td>
                         <td>:</td>
                         <td>
-                            <div style="margin-left: 50px;">{{subFilm.z_rating}}</div>
+                            <div style="margin-left: 50px;">
+                                <p-rating [ngModel]="subFilm.z_rating" [cancel]="false" [readonly]="true"></p-rating>
+                            </div>
                         </td>
                     </tr>
                     <tr>
