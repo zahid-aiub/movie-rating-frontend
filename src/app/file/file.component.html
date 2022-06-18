@@ -1,9 +1,11 @@
 <div class="container">
+    <p-toast key="toast-key"
+             position="top-right"
+    ></p-toast>
     <p style="font-size: 22px;">Welcome : {{username}}</p>
     <button class="btn btn-outline-primary" (click)="handleLogOut()" >Logout</button>
     <br>
     <br>
-    <p-toast></p-toast>
 
     <div>
         <input
@@ -31,15 +33,15 @@
                 <tr>
                     <td>{{file.id}}</td>
                     <td>{{file.filename}}</td>
-                    <td>{{file.isBlockListed ? 'Blocklisted' : ''}}</td>
+                    <td>{{file.approvalRequest == null ? '' : file.approvalRequest}}</td>
                     <td>{{file.createdAt}}</td>
                     <td style="min-width: 180px">
-                        <button *ngIf="!file.isBlockListed" class="btn btn-outline-danger"
+                        <button *ngIf="!file.isBlockListed" class="btn btn-outline-primary"
                                 (click)="download($event, file.id)">Download
                         </button>
-                        &nbsp;
-                        <button *ngIf="file.isBlockListed" class="btn btn-outline-primary"
-                                (click)="openModal(file.id)">Unblock Request
+
+                        <button *ngIf="file.isBlockListed" class="btn btn-success"
+                                (click)="unblockRequest(file.id)">Unblock Request
                         </button>
                     </td>
                 </tr>

@@ -85,17 +85,32 @@ export class FileComponent implements OnInit {
 
     }
 
-    /* onUpload(event: any) {
-         console.log('***********************************')
-         for(let file of event.files) {
-             this.uploadedFiles.push(file);
-         }
-         console.log(this.files);
-         this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
-     }*/
+    unblockRequest(id: any) {
+        const file = this.files.filter((obj: any) => {
+            return obj.id === id;
+        });
+        console.log(file);
+        if (file[0]?.approvalRequest == 'requestForUnblock') {
+            this.messageService.add({
+                key: 'toast-key', severity: 'warn', summary: 'Failed',
+                detail: 'Unblock request already created!'
+            });
+            return;
+        }
 
-    openModal(id: any) {
+        const headers = new HttpHeaders({
+            'Content-Type': 'Application/json',
+            'Authorization': `Bearer ${this.token}`
+        });
 
+        const requestOptions = {headers: headers};
+        this.httpClient.put<any>(API_URL + 'file/request-for-unblock/' + id, null, requestOptions).subscribe(data => {
+            this.messageService.add({
+                key: 'toast-key', severity: 'success', summary: 'Successful',
+                detail: 'Unblock request created!'
+            });
+            this.getAllFiles();
+        });
     }
 
     download($event: MouseEvent, id: any) {
