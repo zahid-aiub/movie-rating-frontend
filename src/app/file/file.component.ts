@@ -61,19 +61,17 @@ export class FileComponent implements OnInit {
 
     handleFileUpload (){
         const headers = new HttpHeaders({
-            'Content-Type': 'multipart/form-data',
-            'Accept': 'application/json',
             'Authorization': `Bearer ${this.token}`
         });
-        // headers.append('Content-Type', 'multipart/form-data');
-        // headers.append('Accept', 'application/json');
+
         const requestOptions = { headers: headers };
         const formData = new FormData();
         formData.append('file', this.uploadedFiles[0]);
 
+        console.log(this.uploadedFiles[0]);
         if (this.uploadedFiles.length > 0) {
             this.httpClient.post<any>(API_URL + 'file/upload', formData, requestOptions).subscribe(data => {
-                console.log(data);
+                this.getAllFiles();
                 this.messageService.add({
                     key: 'toast-key', severity: 'success', summary: 'Successful',
                     detail: 'File Uploaded successfully!'
