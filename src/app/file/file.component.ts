@@ -30,19 +30,18 @@ export class FileComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.checkSession('sessionVal', 'authToken');
+        this.checkSession();
         this.getAllFiles();
     }
 
-    checkSession(usernameKey: string, authTokenKey: string) {
-        let usernameSession: any = localStorage.getItem(usernameKey);
-        let authSession: any = localStorage.getItem(authTokenKey);
-        if (!usernameSession) {
+    checkSession() {
+        let sessionVal: any = JSON.parse(localStorage.getItem('userInfo') + '');
+        console.log(sessionVal);
+        if (!sessionVal || sessionVal.user.roles != 'user') {
             this.router.navigateByUrl('/login');
         }
-        console.log(usernameSession);
-        this.username = usernameSession;
-        this.token = authSession;
+        this.username = sessionVal.user.username;
+        this.token = sessionVal.access_token;
     }
 
     getAllFiles() {
@@ -59,25 +58,31 @@ export class FileComponent implements OnInit {
         console.log(this.uploadedFiles);
     }
 
-    handleFileUpload (){
+    handleFileUpload() {
+        if (this.uploadedFiles.length > 0) {
+            for (let i = 0; i < this.uploadedFiles.length; i++) {
+                this.uploadFiles(this.uploadedFiles[i]);
+            }
+        }
+    }
+
+    uploadFiles(file: any) {
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${this.token}`
         });
 
-        const requestOptions = { headers: headers };
+        const requestOptions = {headers: headers};
         const formData = new FormData();
-        formData.append('file', this.uploadedFiles[0]);
+        formData.append('file', file);
 
-        console.log(this.uploadedFiles[0]);
-        if (this.uploadedFiles.length > 0) {
-            this.httpClient.post<any>(API_URL + 'file/upload', formData, requestOptions).subscribe(data => {
-                this.getAllFiles();
-                this.messageService.add({
-                    key: 'toast-key', severity: 'success', summary: 'Successful',
-                    detail: 'File Uploaded successfully!'
-                });
+        this.httpClient.post<any>(API_URL + 'file/upload', formData, requestOptions).subscribe(data => {
+            this.getAllFiles();
+            this.messageService.add({
+                key: 'toast-key', severity: 'success', summary: 'Successful',
+                detail: 'File Uploaded successfully!'
             });
-        }
+        });
+
     }
 
     /* onUpload(event: any) {
@@ -95,6 +100,11 @@ export class FileComponent implements OnInit {
 
     download($event: MouseEvent, id: any) {
 
+    }
+
+    handleLogOut() {
+        localStorage.clear();
+        this.router.navigateByUrl('/login');
     }
 
 }

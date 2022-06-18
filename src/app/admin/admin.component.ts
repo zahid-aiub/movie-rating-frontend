@@ -23,18 +23,22 @@ export class AdminComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.checkSession('sessionVal', 'authToken');
+        this.checkSession();
     }
 
-    checkSession(usernameKey: string, authTokenKey: string) {
-        let usernameSession: any = localStorage.getItem(usernameKey);
-        let authSession: any = localStorage.getItem(authTokenKey);
-        if (!usernameSession) {
+    checkSession() {
+        let sessionVal: any = JSON.parse(localStorage.getItem('userInfo') + '');
+        console.log(sessionVal);
+        if (!sessionVal || sessionVal.user.roles != 'admin') {
             this.router.navigateByUrl('/login');
         }
-        console.log(usernameSession);
-        this.username = usernameSession;
-        this.token = authSession;
+        this.username = sessionVal.user.username;
+        this.token = sessionVal.access_token;
+    }
+
+    handleLogOut() {
+        localStorage.clear();
+        this.router.navigateByUrl('/login');
     }
 
 }

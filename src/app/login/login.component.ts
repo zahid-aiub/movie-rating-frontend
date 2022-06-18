@@ -42,8 +42,7 @@ export class LoginComponent implements OnInit {
             data.grantType = 'password';
             this.httpClient.post<any>(API_URL + 'auth/login', data).subscribe(data => {
 
-                this.setSession('sessionVal', data.user.username);
-                this.setSession('authToken', data.access_token);
+                this.setSession('userInfo', JSON.stringify(data));
                 if (data?.statusCode == 200 && data?.user.roles == 'user') {
                     this.router.navigateByUrl('/file')
                 }
