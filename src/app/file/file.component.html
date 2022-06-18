@@ -1,0 +1,56 @@
+<p>Welcome: {{username}}</p>
+
+<div class="container">
+    <p-toast></p-toast>
+
+    <!--<p-fileUpload name="demo[]" (onUpload)="onUpload($event)" >
+        <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFiles.length">
+                <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+            </ul>
+        </ng-template>
+    </p-fileUpload>-->
+
+    <div>
+        <input
+                id="file"
+                type="file"
+                multiple
+                class="form-control"
+                (change)="onFileChange($event)">
+    </div>
+    <br>
+    <button class="btn btn-primary" type="submit" (click)="handleFileUpload()">Upload</button>
+
+    <div>
+        <p-table [value]="files">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Filename</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-file>
+                <tr>
+                    <td>{{file.id}}</td>
+                    <td>{{file.filename}}</td>
+                    <td>{{file.isBlockListed ? 'Blocklisted' : ''}}</td>
+                    <td>{{file.createdAt}}</td>
+                    <td style="min-width: 180px">
+                        <button *ngIf="!file.isBlockListed" class="btn btn-outline-danger"
+                                (click)="download($event, file.id)">Download
+                        </button>
+                        &nbsp;
+                        <button *ngIf="file.isBlockListed" class="btn btn-outline-primary"
+                                (click)="openModal(file.id)">Unblock Request
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+

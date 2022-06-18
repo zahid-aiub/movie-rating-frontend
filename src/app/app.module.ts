@@ -32,6 +32,10 @@ import {RatingModule} from "primeng/rating";
 import { UserComponent } from './user/user.component';
 import { SuggestionComponent } from './suggestion/suggestion.component';
 import { GenreDetailsComponent } from './genre-details/genre-details.component';
+import { FileComponent } from './file/file.component';
+import { AdminComponent } from './admin/admin.component';
+import { LoginComponent } from './login/login.component';
+import { FileUploadModule } from "primeng/fileupload";
 
 @NgModule({
     declarations: [
@@ -46,7 +50,10 @@ import { GenreDetailsComponent } from './genre-details/genre-details.component';
         PersonDetailsComponent,
         UserComponent,
         SuggestionComponent,
-        GenreDetailsComponent
+        GenreDetailsComponent,
+        FileComponent,
+        AdminComponent,
+        LoginComponent
 
     ],
     imports: [
@@ -71,7 +78,8 @@ import { GenreDetailsComponent } from './genre-details/genre-details.component';
         CheckboxModule,
         MultiSelectModule,
         ConfirmPopupModule,
-        RatingModule
+        RatingModule,
+        FileUploadModule,
     ],
     providers: [DatePipe, MessageService, ConfirmationService],
     bootstrap: [AppComponent]
