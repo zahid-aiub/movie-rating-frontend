@@ -92,7 +92,6 @@ export class PubFilesComponent implements OnInit {
     }
 
     async download(id: any) {
-
         this.fileService.downloadFile(id).subscribe((response: any) => {
             console.log(response)
             let blob: any = new Blob([response], {type: response.type});

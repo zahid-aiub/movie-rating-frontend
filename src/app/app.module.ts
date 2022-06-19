@@ -23,21 +23,13 @@ import {CheckboxModule} from 'primeng/checkbox';
 import {ModalModule} from 'ngb-modal';
 import {ConfirmPopupModule} from "primeng/confirmpopup";
 import {MultiSelectModule} from 'primeng/multiselect';
-import {FilmComponent} from './film/film.component';
-import {GenreComponent} from './genre/genre.component';
-import {PersonComponent} from './person/person.component';
-import { FilmDetailsComponent } from './film-details/film-details.component';
-import { PersonDetailsComponent } from './person-details/person-details.component';
 import {RatingModule} from "primeng/rating";
-import { UserComponent } from './user/user.component';
-import { SuggestionComponent } from './suggestion/suggestion.component';
-import { GenreDetailsComponent } from './genre-details/genre-details.component';
-import { FileComponent } from './file/file.component';
-import { AdminComponent } from './admin/admin.component';
-import { LoginComponent } from './login/login.component';
-import { FileUploadModule } from "primeng/fileupload";
-import { PubFilesComponent } from './pub-files/pub-files.component';
-import { RegisterComponent } from './register/register.component';
+import {FileComponent} from './file/file.component';
+import {AdminComponent} from './admin/admin.component';
+import {LoginComponent} from './login/login.component';
+import {FileUploadModule} from "primeng/fileupload";
+import {PubFilesComponent} from './pub-files/pub-files.component';
+import {RegisterComponent} from './register/register.component';
 
 @NgModule({
     declarations: [
@@ -45,14 +37,6 @@ import { RegisterComponent } from './register/register.component';
         AppComponent,
         PageNotFoundComponent,
         FieldErrorDisplayComponent,
-        FilmComponent,
-        GenreComponent,
-        PersonComponent,
-        FilmDetailsComponent,
-        PersonDetailsComponent,
-        UserComponent,
-        SuggestionComponent,
-        GenreDetailsComponent,
         FileComponent,
         AdminComponent,
         LoginComponent,

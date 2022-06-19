@@ -76,6 +76,6 @@ export class LoginComponent implements OnInit {
     }
 
     handleCancel() {
-        this.router.navigateByUrl('/all-file')
+        this.router.navigateByUrl('/')
     }
 }

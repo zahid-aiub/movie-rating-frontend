@@ -113,13 +113,20 @@ export class FileComponent implements OnInit {
         });
     }
 
-    download($event: MouseEvent, id: any) {
+    async download(id: any) {
+        this.fileService.downloadFile(id).subscribe((response: any) => {
+            console.log(response)
+            let blob: any = new Blob([response], {type: response.type});
+            const url = window.URL.createObjectURL(blob);
+            window.open(url);
+        }), (error: any) => console.log('Error downloading the file'),
+            () => console.info('File downloaded successfully');
 
     }
 
     handleLogOut() {
         localStorage.clear();
-        this.router.navigateByUrl('/all-file');
+        this.router.navigateByUrl('/');
     }
 
 }
