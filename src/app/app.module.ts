@@ -36,6 +36,8 @@ import { FileComponent } from './file/file.component';
 import { AdminComponent } from './admin/admin.component';
 import { LoginComponent } from './login/login.component';
 import { FileUploadModule } from "primeng/fileupload";
+import { PubFilesComponent } from './pub-files/pub-files.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +55,9 @@ import { FileUploadModule } from "primeng/fileupload";
         GenreDetailsComponent,
         FileComponent,
         AdminComponent,
-        LoginComponent
+        LoginComponent,
+        PubFilesComponent,
+        RegisterComponent
 
     ],
     imports: [

@@ -18,20 +18,29 @@ export class FileService {
     ) {
     }
 
-    getAllFiles(token: any): Observable<any> {
+    getFiles(token: any): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         });
 
-        const requestOptions = { headers: headers };
-        return this.httpClient.get<any>(API_URL + 'file/all', requestOptions).pipe(
+        const requestOptions = {headers: headers};
+        return this.httpClient.get<any>(API_URL + 'file', requestOptions).pipe(
             map((data: any) => {
                 return data;
             }), catchError(this.errorHandlerService.handleError));
     }
 
-    uploadFiles(files: any) {
-
+    getAllFiles(): Observable<any> {
+        return this.httpClient.get<any>(API_URL + 'file/all').pipe(
+            map((data: any) => {
+                return data;
+            }), catchError(this.errorHandlerService.handleError));
     }
+
+    downloadFile(id: any): any {
+        return this.httpClient.get(API_URL + 'file/download/' + id, {responseType: 'blob'});
+    }
+
+
 }

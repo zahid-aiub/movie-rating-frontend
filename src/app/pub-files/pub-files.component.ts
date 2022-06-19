@@ -1,24 +1,23 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import {FileService} from "../core/services/fileshare/file.service";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {FormBuilder} from "@angular/forms";
 import {MessageService} from "primeng/api";
-import {FileService} from "../core/services/fileshare/file.service";
 import {environment} from "../../environments/environment";
+import {catchError, map} from "rxjs/operators";
 
 const API_URL = environment.apiUrl;
 
 @Component({
-    selector: 'app-file',
-    templateUrl: './file.component.html',
-    styleUrls: ['./file.component.css']
+    selector: 'app-pub-files',
+    templateUrl: './pub-files.component.html',
+    styleUrls: ['./pub-files.component.css']
 })
-export class FileComponent implements OnInit {
+export class PubFilesComponent implements OnInit {
 
     uploadedFiles: any[] = [];
-    username: any;
     files: any;
-    token: any;
 
     constructor(
         private router: Router,
@@ -30,22 +29,12 @@ export class FileComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.checkSession();
         this.getAllFiles();
     }
 
-    checkSession() {
-        let sessionVal: any = JSON.parse(localStorage.getItem('userInfo') + '');
-        console.log(sessionVal);
-        if (!sessionVal || sessionVal.user.roles != 'user') {
-            this.router.navigateByUrl('/login');
-        }
-        this.username = sessionVal.user.username;
-        this.token = sessionVal.access_token;
-    }
 
     getAllFiles() {
-        this.fileService.getFiles(this.token).subscribe((data) => {
+        this.fileService.getAllFiles().subscribe((data) => {
             console.log(data);
             this.files = data;
         });
@@ -67,15 +56,10 @@ export class FileComponent implements OnInit {
     }
 
     uploadFiles(file: any) {
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${this.token}`
-        });
-
-        const requestOptions = {headers: headers};
         const formData = new FormData();
         formData.append('file', file);
 
-        this.httpClient.post<any>(API_URL + 'file/upload', formData, requestOptions).subscribe(data => {
+        this.httpClient.post<any>(API_URL + 'file/public/upload', formData).subscribe(data => {
             this.getAllFiles();
             this.messageService.add({
                 key: 'toast-key', severity: 'success', summary: 'Successful',
@@ -98,13 +82,7 @@ export class FileComponent implements OnInit {
             return;
         }
 
-        const headers = new HttpHeaders({
-            'Content-Type': 'Application/json',
-            'Authorization': `Bearer ${this.token}`
-        });
-
-        const requestOptions = {headers: headers};
-        this.httpClient.put<any>(API_URL + 'file/request-for-unblock/' + id, null, requestOptions).subscribe(data => {
+        this.httpClient.put<any>(API_URL + 'file/pub/request-for-unblock/' + id, null).subscribe(data => {
             this.messageService.add({
                 key: 'toast-key', severity: 'success', summary: 'Successful',
                 detail: 'Unblock request created!'
@@ -113,13 +91,20 @@ export class FileComponent implements OnInit {
         });
     }
 
-    download($event: MouseEvent, id: any) {
+    async download(id: any) {
+
+        this.fileService.downloadFile(id).subscribe((response: any) => {
+            console.log(response)
+            let blob: any = new Blob([response], {type: response.type});
+            const url = window.URL.createObjectURL(blob);
+            window.open(url);
+        }), (error: any) => console.log('Error downloading the file'),
+            () => console.info('File downloaded successfully');
 
     }
 
-    handleLogOut() {
-        localStorage.clear();
-        this.router.navigateByUrl('/all-file');
-    }
 
+    handleSignIn() {
+        this.router.navigateByUrl('/login');
+    }
 }

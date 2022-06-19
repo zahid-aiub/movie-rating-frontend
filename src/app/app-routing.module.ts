@@ -12,10 +12,14 @@ import {GenreDetailsComponent} from "./genre-details/genre-details.component";
 import {LoginComponent} from "./login/login.component";
 import {FileComponent} from "./file/file.component";
 import {AdminComponent} from "./admin/admin.component";
+import {PubFilesComponent} from "./pub-files/pub-files.component";
+import {RegisterComponent} from "./register/register.component";
 
 const routes: Routes = [
     {path: '', component: FilmComponent},
+    {path: 'all-file', component: PubFilesComponent},
     {path: 'login', component: LoginComponent},
+    {path: 'signup', component: RegisterComponent},
     {path: 'file', component: FileComponent},
     {path: 'admin', component: AdminComponent},
 

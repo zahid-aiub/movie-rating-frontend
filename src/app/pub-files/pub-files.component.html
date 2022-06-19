@@ -3,10 +3,12 @@
              position="top-right"
     ></p-toast>
     <div class="text-center">
-        <h2>Your Uploaded Files</h2>
+        <h2>Public Files</h2>
     </div>
-    <p style="font-size: 22px;">Welcome : {{username}}</p>
-    <button class="btn btn-outline-primary" (click)="handleLogOut()" >Logout</button>
+    <br>
+
+    <br>
+    <button class="btn btn-outline-primary" (click)="handleSignIn()" >Sign In</button>
     <br>
     <br>
 
@@ -30,6 +32,7 @@
                     <th>Size</th>
                     <th>Status</th>
                     <th>Uploaded At</th>
+                    <th>Last Download</th>
                     <th>Action</th>
                 </tr>
             </ng-template>
@@ -40,9 +43,10 @@
                     <td>{{file.size / 1024 | number:'1.0-2'}} KB</td>
                     <td>{{file.approvalRequest == null ? '' : file.approvalRequest}}</td>
                     <td>{{file.createdAt}}</td>
+                    <td>{{file.lastDownloadedAt}}</td>
                     <td style="min-width: 180px">
                         <button *ngIf="!file.isBlockListed" class="btn btn-outline-primary"
-                                (click)="download($event, file.id)">Download
+                                (click)="download(file.id)">Download
                         </button>
 
                         <button *ngIf="file.isBlockListed" class="btn btn-success"

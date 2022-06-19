@@ -4,10 +4,23 @@
     ></p-toast>
 
     <div class="text-center">
-        <h2>Sign In</h2>
+        <h2>User Sign Up</h2>
     </div>
     <br>
+
+    <br>
     <form class="form-control" [formGroup]="form">
+        <br>
+        <div class="form-group" [ngClass]="displayFieldCss('fullName')">
+            <div class="col-sm-12">
+                <label for="username" class="control-label required">FullName</label>
+                <input type="text" id="fullName" class="form-control"
+                       formControlName="fullName">
+                <app-field-error-display [displayError]="isFieldValid('fullName')"
+                                         errorMsg="FullName is required">
+                </app-field-error-display>
+            </div>
+        </div>
         <br>
         <div class="form-group" [ngClass]="displayFieldCss('username')">
             <div class="col-sm-12">
@@ -34,36 +47,9 @@
         <br>
 
         <!-- Submit button -->
-        <button type="button" class="btn btn-primary btn-block mb-4" (click)="handleLogin()">Sign in</button>&nbsp;&nbsp;
+        <button type="button" class="btn btn-primary btn-block mb-4" (click)="handleSignUp()">Sign Up</button> &nbsp;&nbsp;
         <button type="button" class="btn btn-outline-primary btn-block mb-4" (click)="handleCancel()">Cancel</button>
 
-        <!-- 2 column grid layout for inline styling -->
-        <!--<div class="row mb-4">
-            <div class="col">
-                &lt;!&ndash; Simple link &ndash;&gt;
-                <a href="#!">Forgot password?</a>
-            </div>
-        </div>-->
-
-        <div class="text-center">
-            <p>Not a member? <a href="/signup">Register</a></p>
-            <!--            <p>or sign up with:</p>-->
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="fab fa-facebook-f"></i>
-            </button>
-
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="fab fa-google"></i>
-            </button>
-
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="fab fa-twitter"></i>
-            </button>
-
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="fab fa-github"></i>
-            </button>
-        </div>
 
     </form>
 
