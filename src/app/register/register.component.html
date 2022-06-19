@@ -36,7 +36,7 @@
         <div class="form-group" [ngClass]="displayFieldCss('password')">
             <div class="col-sm-12">
                 <label for="password" class="control-label required">Password</label>
-                <input type="text" id="password" class="form-control"
+                <input type="password" id="password" class="form-control"
                        formControlName="password">
                 <app-field-error-display [displayError]="isFieldValid('password')"
                                          errorMsg="Password is required">

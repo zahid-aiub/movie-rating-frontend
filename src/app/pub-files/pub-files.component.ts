@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {FileService} from "../core/services/fileshare/file.service";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {FormBuilder} from "@angular/forms";
 import {MessageService} from "primeng/api";
 import {environment} from "../../environments/environment";
-import {catchError, map} from "rxjs/operators";
 
 const API_URL = environment.apiUrl;
 

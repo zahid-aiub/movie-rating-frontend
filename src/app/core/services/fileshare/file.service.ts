@@ -38,6 +38,19 @@ export class FileService {
             }), catchError(this.errorHandlerService.handleError));
     }
 
+    getAllPendingApprovalFiles(token: any): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+
+        const requestOptions = {headers: headers};
+        return this.httpClient.get<any>(API_URL + 'file/pending-approval', requestOptions).pipe(
+            map((data: any) => {
+                return data;
+            }), catchError(this.errorHandlerService.handleError));
+    }
+
     downloadFile(id: any): any {
         return this.httpClient.get(API_URL + 'file/download/' + id, {responseType: 'blob'});
     }

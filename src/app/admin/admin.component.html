@@ -1,5 +1,46 @@
 <div class="container">
+    <p-toast key="toast-key"
+             position="top-right"
+    ></p-toast>
+    <div class="text-center">
+        <h2>Approval Pending Files</h2>
+    </div>
+    <br>
     <p style="font-size: 22px;">Welcome : {{username}}</p>
     <button class="btn btn-outline-primary" (click)="handleLogOut()" >Logout</button>
+
+    <div>
+        <p-table [value]="files">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Filename</th>
+                    <th>Size</th>
+                    <th>Status</th>
+                    <th>Uploaded At</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-file>
+                <tr>
+                    <td>{{file.id}}</td>
+                    <td>{{file.filename}}</td>
+                    <td>{{file.size / 1024 | number:'1.0-2'}} KB</td>
+                    <td>{{file.approvalRequest == null ? '' : file.approvalRequest}}</td>
+                    <td>{{file.createdAt}}</td>
+                    <td style="min-width: 180px">
+                        <button class="btn btn-outline-primary"
+                                (click)="handleApproveOrReject(file.id, 'approved')">Approve
+                        </button> &nbsp;&nbsp;
+
+                        <button class="btn btn-outline-primary"
+                                (click)="handleApproveOrReject(file.id, 'rejected')">Reject
+                        </button>
+
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
 
 </div>
